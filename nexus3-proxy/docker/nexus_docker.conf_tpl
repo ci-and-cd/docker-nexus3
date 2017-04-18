@@ -1,0 +1,82 @@
+
+upstream docker_mirror {
+  server DOCKER_MIRROR_URL;
+}
+
+upstream docker_registry {
+  server DOCKER_REGISTRY_URL;
+}
+
+upstream nexus {
+  server NEXUS_URL;
+}
+
+proxy_send_timeout 120;
+proxy_read_timeout 300;
+proxy_buffering    off;
+tcp_nodelay        on;
+client_max_body_size 10240M;
+
+server {
+  server_name DOCKER_REGISTRY_DOMAIN;
+
+  location / {
+    # add basic auth header
+    set $authorization $http_authorization;
+    if ($authorization = '') {
+      set $authorization _NEXUS_DEPLOYMENT_AUTH;
+    }
+
+    proxy_redirect  off; 
+    proxy_set_header Authorization $authorization;
+    proxy_set_header Host $host; 
+    proxy_set_header X-Real-IP $remote_addr; 
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+
+    proxy_pass http://docker_registry;
+  }
+}
+
+server {
+  server_name DOCKER_MIRROR_DOMAIN;
+
+  location / {
+    # add basic auth header
+    set $authorization $http_authorization;
+    if ($authorization = '') {
+      set $authorization _NEXUS_DEPLOYMENT_AUTH;
+    }
+
+    proxy_redirect  off; 
+    proxy_set_header Authorization $authorization;
+    proxy_set_header Host $host; 
+    proxy_set_header X-Real-IP $remote_addr; 
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+
+    proxy_pass http://docker_mirror;
+  }
+}
+
+server {
+  server_name NEXUS_PROXY_HOSTNAME;
+  location / {
+    proxy_redirect  off; 
+    proxy_set_header Host $host; 
+    proxy_set_header X-Real-IP $remote_addr; 
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+
+    proxy_pass http://nexus;
+  }
+}
+
+server {
+  server_name FILESERVER_DOMAIN;
+  location ~ ^/(.*) {
+    proxy_redirect  off;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    proxy_pass http://nexus/FILESERVER_PATH/$1;
+  }
+}

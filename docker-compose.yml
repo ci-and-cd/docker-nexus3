@@ -2,6 +2,23 @@
 # see: https://github.com/clearent/nexus
 # see: https://github.com/sonatype/docker-nexus3/blob/master/Dockerfile
 
+# see: http://www.sonatype.org/nexus/2015/09/22/docker-and-nexus-3-ready-set-action/
+# see: http://codeheaven.io/using-nexus-3-as-your-repository-part-3-docker-images/
+
+# Docker usage without SSL:
+# Must login
+# see: [add anonymous read access support for docker repositories](https://issues.sonatype.org/browse/NEXUS-10813)
+#
+# docker login -u deployment -p deployment registry.docker.local
+# docker login -u deployment -p deployment registry.docker.local:5000
+# docker login -u deployment -p deployment registry.docker.local:5002
+# docker login -u deployment -p deployment registry.docker.local:5003
+# cat ~/.docker/config.json
+# docker search registry.docker.local/alpine
+# docker pull registry.docker.local/alpine
+# docker tag nginx:1.11.5-alpine registry.docker.local:5000/nginx:1.11.5-alpine
+# docker push registry.docker.local:5000/nginx:1.11.5-alpine
+
 # With SSL: TODO
 # see: https://books.sonatype.com/nexus-book/3.0/reference/security.html#ssl-inbound
 # see: http://www.eclipse.org/jetty/documentation/current/configuring-ssl.html
@@ -45,7 +62,7 @@ version: '2.1'
 services:
   nexus3:
     build:
-      context: .
+      context: nexus3
       dockerfile: Dockerfile
       args:
       - build_fileserver=https://github.com
@@ -69,6 +86,34 @@ services:
     - NEXUS_CONTEXT=${NEXUS_CONTEXT:-nexus}
     - NEXUS_DEPLOYMENT_PASSWORD=${NEXUS_DEPLOYMENT_PASSWORD:-deployment}
     - NEXUS_HOSTNAME=${NEXUS_HOSTNAME:-nexus3.local}
+
+  nexus3-proxy:
+    build:
+      context: nexus3-proxy
+      dockerfile: Dockerfile
+    image: ${DOCKER_REGISTRY:-registry.docker.local}/nexus3-proxy:1.10.2-alpine
+    restart: always
+    command: ["nginx", "-g", "daemon off;"]
+    container_name: ${NEXUS_PROXY_HOSTNAME:-nexus.local}
+    hostname: ${NEXUS_PROXY_HOSTNAME:-nexus.local}
+    links:
+    - nexus3:${FILESERVER_DOMAIN:-fileserver.local}
+    - nexus3:${NEXUS_DOMAIN:-nexus3.local}
+    - nexus3:${DOCKER_MIRROR_DOMAIN:-mirror.docker.local}
+    - nexus3:${DOCKER_REGISTRY_DOMAIN:-registry.docker.local}
+    ports:
+    - "80:80/tcp"
+    environment:
+    - DOCKER_MIRROR_DOMAIN=${DOCKER_MIRROR_DOMAIN:-mirror.docker.local}
+    - DOCKER_MIRROR_PORT=${DOCKER_MIRROR_PORT:-5001}
+    - DOCKER_REGISTRY_DOMAIN=${DOCKER_REGISTRY_DOMAIN:-registry.docker.local}
+    - DOCKER_REGISTRY_PORT=${DOCKER_REGISTRY_PORT:-5000}
+    - FILESERVER_DOMAIN=${FILESERVER_DOMAIN:-fileserver.local}
+    - NEXUS_CONTEXT=${NEXUS_CONTEXT:-nexus} #/nexus/repository/files
+    - NEXUS_DEPLOYMENT_PASSWORD=${NEXUS_DEPLOYMENT_PASSWORD:-deployment}
+    - NEXUS_DOMAIN=${NEXUS_DOMAIN:-nexus3.local}
+    - NEXUS_PORT=${NEXUS_PORT:-8081}
+    - NEXUS_PROXY_HOSTNAME=${NEXUS_PROXY_HOSTNAME:-nexus.local}
 
 volumes:
   nexus3-volume: {}
