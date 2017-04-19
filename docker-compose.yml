@@ -66,7 +66,7 @@ services:
       dockerfile: Dockerfile
       args:
       - build_fileserver=https://github.com
-    image: ${DOCKER_REGISTRY:-registry.docker.local}/nexus3:3.2.1
+    image: ${DOCKER_REGISTRY:-home1oss}/nexus3:3.2.1
     restart: always
     command: ["bin/nexus", "run"]
     container_name: ${NEXUS_HOSTNAME:-nexus3.local}
@@ -91,7 +91,7 @@ services:
     build:
       context: nexus3-proxy
       dockerfile: Dockerfile
-    image: ${DOCKER_REGISTRY:-registry.docker.local}/nexus3-proxy:1.10.2-alpine
+    image: ${DOCKER_REGISTRY:-home1oss}/nexus3-proxy:1.10.2-alpine
     restart: always
     command: ["nginx", "-g", "daemon off;"]
     container_name: ${NEXUS_PROXY_HOSTNAME:-nexus.local}
