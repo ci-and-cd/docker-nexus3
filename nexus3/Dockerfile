@@ -1,5 +1,5 @@
 
-FROM sonatype/nexus3:3.2.1
+FROM sonatype/nexus3:3.3.1
 
 ARG build_fileserver
 
