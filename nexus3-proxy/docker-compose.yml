@@ -60,47 +60,20 @@
 
 version: '2.1'
 services:
-  nexus3:
-    build:
-      context: nexus3
-      dockerfile: Dockerfile
-      args:
-      - build_fileserver=https://github.com
-    image: home1oss/nexus3:3.3.1
-    restart: always
-    command: ["bin/nexus", "run"]
-    container_name: ${NEXUS_HOSTNAME:-nexus3.local}
-    hostname: ${NEXUS_HOSTNAME:-nexus3.local}
-    ports:
-    - "28081:8081/tcp"
-    #- "80:5000/tcp"
-    #- "5002:5002/tcp"
-    #- "5003:5003/tcp"
-    #- "5001:5001/tcp"
-    volumes:
-    - nexus3-volume:/nexus-data
-    #- ./keystore.jks:/nexus-data/keystore.jks
-    environment:
-    - INTERNAL_NEXUS=${INTERNAL_NEXUS}/content/groups/public/
-    #- JKS_PASSWORD=changeit
-    - NEXUS_CONTEXT=${NEXUS_CONTEXT:-nexus}
-    - NEXUS_DEPLOYMENT_PASSWORD=${NEXUS_DEPLOYMENT_PASSWORD:-deployment}
-    - NEXUS_HOSTNAME=${NEXUS_HOSTNAME:-nexus3.local}
-
   nexus3-proxy:
     build:
-      context: nexus3-proxy
+      context: .
       dockerfile: Dockerfile
     image: ${DOCKER_REGISTRY:-home1oss}/nexus3-proxy:1.10.2-alpine
     restart: always
     command: ["nginx", "-g", "daemon off;"]
     container_name: ${NEXUS_PROXY_HOSTNAME:-nexus.local}
     hostname: ${NEXUS_PROXY_HOSTNAME:-nexus.local}
-    links:
-    - nexus3:${FILESERVER_DOMAIN:-fileserver.local}
-    - nexus3:${NEXUS_DOMAIN:-nexus3.local}
-    - nexus3:${DOCKER_MIRROR_DOMAIN:-mirror.docker.local}
-    - nexus3:${DOCKER_REGISTRY_DOMAIN:-registry.docker.local}
+    external_links:
+    - ${NEXUS_HOSTNAME:-nexus3.local}:${FILESERVER_DOMAIN:-fileserver.local}
+    - ${NEXUS_HOSTNAME:-nexus3.local}:${NEXUS_DOMAIN:-nexus3.local}
+    - ${NEXUS_HOSTNAME:-nexus3.local}:${DOCKER_MIRROR_DOMAIN:-mirror.docker.local}
+    - ${NEXUS_HOSTNAME:-nexus3.local}:${DOCKER_REGISTRY_DOMAIN:-registry.docker.local}
     ports:
     - "80:80/tcp"
     environment:

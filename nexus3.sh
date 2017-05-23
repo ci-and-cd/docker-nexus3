@@ -18,6 +18,9 @@ export INTERNAL_NEXUS=none
 export NEXUS_DOMAIN=nexus3.${INFRASTRUCTURE}
 export NEXUS_HOSTNAME=nexus3.${INFRASTRUCTURE}
 export NEXUS_PROXY_HOSTNAME=nexus.${INFRASTRUCTURE}
-docker-compose build
+
+#(cd nexus3 && docker-compose build)
+(cd nexus3 && docker-compose up -d)
+#(cd nexus3-proxy && docker-compose build)
+(cd nexus3-proxy && docker-compose up -d)
 #docker network create oss-network
-#docker-compose up -d
