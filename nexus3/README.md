@@ -3,6 +3,12 @@
 
 ## Nexus3 Without SSL:
 
+Environment variables
+
+  Local nexus can set up a company's internal nexus as upstream
+
+    export INTERNAL_NEXUS=<http://nexus3.internal>
+
 Start
 
     docker-compose up -d
