@@ -1,0 +1,37 @@
+
+version: '2.1'
+services:
+  nexus3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+      - build_fileserver=https://github.com
+    image: ${DOCKER_REGISTRY:-home1oss}/nexus3:3.3.1
+    restart: always
+    command: ["bin/nexus", "run"]
+    container_name: ${NEXUS_HOSTNAME:-nexus3.local}
+    hostname: ${NEXUS_HOSTNAME:-nexus3.local}
+    ports:
+    - "${NEXUS_EXTERNAL_PORT:-28081}:${NEXUS_PORT:-8081}"
+    #- "80:5000/tcp"
+    #- "5002:5002/tcp"
+    #- "5003:5003/tcp"
+    #- "5001:5001/tcp"
+    volumes:
+    - nexus3-volume:/nexus-data
+    #- ./keystore.jks:/nexus-data/keystore.jks
+    environment:
+    - INTERNAL_NEXUS=${INTERNAL_NEXUS}/content/groups/public/
+    #- JKS_PASSWORD=changeit
+    - NEXUS_CONTEXT=${NEXUS_CONTEXT:-nexus}
+    - NEXUS_DEPLOYMENT_PASSWORD=${NEXUS_DEPLOYMENT_PASSWORD:-deployment}
+    - NEXUS_HOSTNAME=${NEXUS_HOSTNAME:-nexus3.local}
+
+volumes:
+  nexus3-volume: {}
+
+networks:
+  default:
+    external:
+      name: oss-network

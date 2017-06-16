@@ -1,0 +1,38 @@
+
+version: '2.1'
+services:
+  nexus3-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: home1oss/nexus3-proxy:1.10.2-alpine
+    restart: always
+    command: ["nginx", "-g", "daemon off;"]
+    container_name: ${NEXUS_PROXY_HOSTNAME:-nexus.local}
+    hostname: ${NEXUS_PROXY_HOSTNAME:-nexus.local}
+    external_links:
+    - ${NEXUS_HOSTNAME:-nexus3.local}:${FILESERVER_DOMAIN:-fileserver.local}
+    - ${NEXUS_HOSTNAME:-nexus3.local}:${NEXUS_DOMAIN:-nexus3.local}
+    - ${NEXUS_HOSTNAME:-nexus3.local}:${DOCKER_MIRROR_DOMAIN:-mirror.docker.local}
+    - ${NEXUS_HOSTNAME:-nexus3.local}:${DOCKER_REGISTRY_DOMAIN:-registry.docker.local}
+    ports:
+    - "80:80/tcp"
+    environment:
+    - DOCKER_MIRROR_DOMAIN=${DOCKER_MIRROR_DOMAIN:-mirror.docker.local}
+    - DOCKER_MIRROR_PORT=${DOCKER_MIRROR_PORT:-5001}
+    - DOCKER_REGISTRY_DOMAIN=${DOCKER_REGISTRY_DOMAIN:-registry.docker.local}
+    - DOCKER_REGISTRY_PORT=${DOCKER_REGISTRY_PORT:-5000}
+    - FILESERVER_DOMAIN=${FILESERVER_DOMAIN:-fileserver.local}
+    - NEXUS_CONTEXT=${NEXUS_CONTEXT:-nexus} #/nexus/repository/files
+    - NEXUS_DEPLOYMENT_PASSWORD=${NEXUS_DEPLOYMENT_PASSWORD:-deployment}
+    - NEXUS_DOMAIN=${NEXUS_DOMAIN:-nexus3.local}
+    - NEXUS_PORT=${NEXUS_PORT:-8081}
+    - NEXUS_PROXY_HOSTNAME=${NEXUS_PROXY_HOSTNAME:-nexus.local}
+
+volumes:
+  nexus3-volume: {}
+
+networks:
+  default:
+    external:
+      name: oss-network
