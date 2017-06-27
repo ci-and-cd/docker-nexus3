@@ -84,9 +84,9 @@ init_nexus() {
 
     # internal-nexus
     if [[ "${INTERNAL_NEXUS}" == http* ]]; then
-        nexus_maven2_proxy "${nexus_http_prefix}" "internal-nexus.snapshot" "SNAPSHOT" "http://nexus2.internal/nexus/content/groups/public/"
+        nexus_maven2_proxy "${nexus_http_prefix}" "internal-nexus.snapshot" "SNAPSHOT" "${INTERNAL_NEXUS}/nexus/repository/maven-public/"
         maven_group_members="${maven_group_members},internal-nexus.snapshot"
-        nexus_maven2_proxy "${nexus_http_prefix}" "internal-nexus.release" "RELEASE" "http://nexus2.internal/nexus/content/groups/public/"
+        nexus_maven2_proxy "${nexus_http_prefix}" "internal-nexus.release" "RELEASE" "${INTERNAL_NEXUS}/nexus/repository/maven-public/"
         maven_group_members="${maven_group_members},internal-nexus.release"
     fi
 
