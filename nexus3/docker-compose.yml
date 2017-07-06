@@ -14,10 +14,14 @@ services:
     hostname: ${NEXUS_HOSTNAME:-nexus3.local}
     ports:
     - "${NEXUS_EXTERNAL_PORT:-28081}:${NEXUS_PORT:-8081}"
-    #- "80:5000/tcp"
-    #- "5002:5002/tcp"
-    #- "5003:5003/tcp"
-    #- "5001:5001/tcp"
+    # registry: docker-hosted@5000
+    - "5000:5000/tcp"
+    # mirror: docker-public@5001
+    - "5001:5001/tcp"
+    # proxy: docker-central-163@5002
+    - "5002/tcp"
+    # proxy: docker-central-hub@5003
+    - "5003/tcp"
     volumes:
     - nexus3-volume:/nexus-data
     #- ./keystore.jks:/nexus-data/keystore.jks
