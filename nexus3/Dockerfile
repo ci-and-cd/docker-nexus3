@@ -5,6 +5,8 @@ ARG build_fileserver
 
 USER root
 
+RUN yum -y install socat
+
 ADD docker/install_waitforit.sh /root/
 RUN /root/install_waitforit.sh
 

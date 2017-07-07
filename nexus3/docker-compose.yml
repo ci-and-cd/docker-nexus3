@@ -10,10 +10,10 @@ services:
     image: ${DOCKER_REGISTRY:-home1oss}/nexus3:3.3.1
     restart: always
     command: ["bin/nexus", "run"]
-    container_name: ${NEXUS_HOSTNAME:-nexus3.local}
-    hostname: ${NEXUS_HOSTNAME:-nexus3.local}
+    container_name: ${NEXUS3_HOSTNAME:-nexus3.local}
+    hostname: ${NEXUS3_HOSTNAME:-nexus3.local}
     ports:
-    - "${NEXUS_EXTERNAL_PORT:-28081}:${NEXUS_PORT:-8081}"
+    - "${NEXUS3_PORT:-28081}:${NEXUS3_PORT:-28081}"
     # registry: docker-hosted@5000
     - "5000:5000/tcp"
     # mirror: docker-public@5001
@@ -23,19 +23,24 @@ services:
     # proxy: docker-central-hub@5003
     - "5003/tcp"
     volumes:
-    - nexus3-volume:/nexus-data
+    - volume-nexus3-nexus-data:/nexus-data
     #- ./keystore.jks:/nexus-data/keystore.jks
     environment:
-    - INTERNAL_NEXUS=${INTERNAL_NEXUS}/content/groups/public/
+    # http://nexus3.internal
+    - INTERNAL_NEXUS3=${INTERNAL_NEXUS3}
+    # http://nexus2.internal
+    #- INTERNAL_NEXUS2=${INTERNAL_NEXUS2}
     #- JKS_PASSWORD=changeit
-    - NEXUS_CONTEXT=${NEXUS_CONTEXT:-nexus}
-    - NEXUS_DEPLOYMENT_PASSWORD=${NEXUS_DEPLOYMENT_PASSWORD:-deployment}
-    - NEXUS_HOSTNAME=${NEXUS_HOSTNAME:-nexus3.local}
-
-volumes:
-  nexus3-volume: {}
+    - NEXUS_CONTEXT=${NEXUS3_CONTEXT:-nexus}
+    - NEXUS3_CONTEXT=${NEXUS3_CONTEXT:-nexus}
+    - NEXUS3_DEPLOYMENT_PASSWORD=${NEXUS3_DEPLOYMENT_PASSWORD:-deployment}
+    - NEXUS3_HOSTNAME=${NEXUS3_HOSTNAME:-nexus3.local}
+    - NEXUS3_PORT=${NEXUS3_PORT:-28081}
 
 networks:
   default:
     external:
       name: oss-network
+
+volumes:
+  volume-nexus3-nexus-data: {}

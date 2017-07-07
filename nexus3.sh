@@ -14,10 +14,10 @@ export INFRASTRUCTURE=internal
 export DOCKER_MIRROR_DOMAIN=mirror.docker.${INFRASTRUCTURE}
 export DOCKER_REGISTRY_DOMAIN=registry.docker.${INFRASTRUCTURE}
 export FILESERVER_DOMAIN=fileserver.${INFRASTRUCTURE}
-export INTERNAL_NEXUS=none
-export NEXUS_DOMAIN=nexus3.${INFRASTRUCTURE}
-export NEXUS_HOSTNAME=nexus3.${INFRASTRUCTURE}
-export NEXUS_PROXY_HOSTNAME=nexus.${INFRASTRUCTURE}
+export INTERNAL_NEXUS3=none
+export NEXUS3_DOMAIN=nexus3.${INFRASTRUCTURE}
+export NEXUS3_HOSTNAME=nexus3.${INFRASTRUCTURE}
+export NEXUS3_PROXY_HOSTNAME=nexus.${INFRASTRUCTURE}
 
 #(cd nexus3 && docker-compose build)
 (cd nexus3 && docker-compose up -d)

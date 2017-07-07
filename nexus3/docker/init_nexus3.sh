@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if [ -z "${NEXUS_HOSTNAME}" ]; then NEXUS_HOSTNAME="nexus3.local"; fi
-if [ -z "${NEXUS_ADDRESS}" ]; then NEXUS_ADDRESS="${NEXUS_HOSTNAME}:8081"; fi
+if [ -z "${NEXUS3_HOSTNAME}" ]; then NEXUS3_HOSTNAME="nexus3.local"; fi
+if [ -z "${NEXUS_ADDRESS}" ]; then NEXUS_ADDRESS="${NEXUS3_HOSTNAME}:8081"; fi
 
 init_nexus() {
     if type -p waitforit > /dev/null; then
@@ -18,8 +18,8 @@ init_nexus() {
     . nexus3_utils.sh
 
     local nexus_http_prefix=""
-    if [ ! -z "${NEXUS_CONTEXT}" ]; then
-        nexus_http_prefix="http://${NEXUS_ADDRESS}/${NEXUS_CONTEXT}/service"
+    if [ ! -z "${NEXUS3_CONTEXT}" ]; then
+        nexus_http_prefix="http://${NEXUS_ADDRESS}/${NEXUS3_CONTEXT}/service"
     else
         nexus_http_prefix="http://${NEXUS_ADDRESS}/service"
     fi
@@ -30,10 +30,10 @@ init_nexus() {
     # 设置deployment账户密码
     # see: http://stackoverflow.com/questions/40966763/how-do-i-create-a-user-with-the-a-role-with-the-minimal-set-of-privileges-deploy
     # see: https://books.sonatype.com/nexus-book/reference3/security.html#privileges
-    if [ -z "${NEXUS_DEPLOYMENT_PASSWORD}" ]; then
-        NEXUS_DEPLOYMENT_PASSWORD="deployment"
+    if [ -z "${NEXUS3_DEPLOYMENT_PASSWORD}" ]; then
+        NEXUS3_DEPLOYMENT_PASSWORD="deployment"
     fi
-    nexus_user "${nexus_http_prefix}" "deployment" "${NEXUS_DEPLOYMENT_PASSWORD}"
+    nexus_user "${nexus_http_prefix}" "deployment" "${NEXUS3_DEPLOYMENT_PASSWORD}"
 
     local maven_group_members="maven-releases,maven-snapshots,maven-central"
     # TODO nexus_maven2_hosted "maven-thirdparty" "SNAPSHOT"
@@ -83,11 +83,19 @@ init_nexus() {
     maven_group_members="${maven_group_members},github-chshawkn-maven-settings-decoder"
 
     # internal-nexus
-    if [[ "${INTERNAL_NEXUS}" == http* ]]; then
-        nexus_maven2_proxy "${nexus_http_prefix}" "internal-nexus.snapshot" "SNAPSHOT" "${INTERNAL_NEXUS}/nexus/repository/maven-public/"
-        maven_group_members="${maven_group_members},internal-nexus.snapshot"
-        nexus_maven2_proxy "${nexus_http_prefix}" "internal-nexus.release" "RELEASE" "${INTERNAL_NEXUS}/nexus/repository/maven-public/"
-        maven_group_members="${maven_group_members},internal-nexus.release"
+    # nexus2 /nexus/content/groups/public/
+    if [[ "${INTERNAL_NEXUS2}" == http* ]]; then
+        nexus_maven2_proxy "${nexus_http_prefix}" "internal-nexus2.snapshot" "SNAPSHOT" "${INTERNAL_NEXUS2}/nexus/content/groups/public/"
+        maven_group_members="${maven_group_members},internal-nexus2.snapshot"
+        nexus_maven2_proxy "${nexus_http_prefix}" "internal-nexus2.release" "RELEASE" "${INTERNAL_NEXUS2}/nexus/content/groups/public/"
+        maven_group_members="${maven_group_members},internal-nexus2.release"
+    fi
+    # nexus3 /nexus/repository/maven-public/
+    if [[ "${INTERNAL_NEXUS3}" == http* ]]; then
+        nexus_maven2_proxy "${nexus_http_prefix}" "internal-nexus3.snapshot" "SNAPSHOT" "${INTERNAL_NEXUS3}/nexus/repository/maven-public/"
+        maven_group_members="${maven_group_members},internal-nexus3.snapshot"
+        nexus_maven2_proxy "${nexus_http_prefix}" "internal-nexus3.release" "RELEASE" "${INTERNAL_NEXUS3}/nexus/repository/maven-public/"
+        maven_group_members="${maven_group_members},internal-nexus3.release"
     fi
 
     nexus_maven_group "${nexus_http_prefix}" "maven-public" "${maven_group_members}"
@@ -128,3 +136,7 @@ init_nexus() {
 }
 
 init_nexus
+
+if [ ! -z "${NEXUS3_PORT}" ] && [ "${NEXUS3_PORT}" != "8081" ]; then
+    socat TCP-LISTEN:${NEXUS3_PORT},fork TCP:127.0.0.1:8081 &
+fi

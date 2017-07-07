@@ -58,7 +58,7 @@ server {
 }
 
 server {
-  server_name NEXUS_PROXY_HOSTNAME;
+  server_name NEXUS3_PROXY_HOSTNAME;
   location / {
     proxy_redirect  off; 
     proxy_set_header Host $host; 
