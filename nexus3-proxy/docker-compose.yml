@@ -29,9 +29,6 @@ services:
     - NEXUS3_PORT=${NEXUS3_PORT:-28081}
     - NEXUS3_PROXY_HOSTNAME=${NEXUS3_PROXY_HOSTNAME:-nexus.local}
 
-volumes:
-  nexus3-volume: {}
-
 networks:
   default:
     external:
