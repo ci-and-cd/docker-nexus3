@@ -82,7 +82,7 @@ init_nexus() {
     nexus_maven2_proxy "${nexus_http_prefix}" "github-chshawkn-maven-settings-decoder" "RELEASE" "https://raw.github.com/chshawkn/maven-settings-decoder/mvn-repo/"
     maven_group_members="${maven_group_members},github-chshawkn-maven-settings-decoder"
 
-    # internal-nexus
+    # nexus.internal
     # nexus2 /nexus/content/groups/public/
     if [[ "${INTERNAL_NEXUS2}" == http* ]]; then
         nexus_maven2_proxy "${nexus_http_prefix}" "internal-nexus2.snapshot" "SNAPSHOT" "${INTERNAL_NEXUS2}/nexus/content/groups/public/"
