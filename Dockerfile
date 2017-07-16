@@ -1,11 +1,14 @@
 
-FROM sonatype/nexus3:3.3.1
+FROM sonatype/nexus3:3.4.0
 
 ARG build_fileserver
 
 USER root
 
-RUN yum -y install socat
+RUN yum install epel-release -y && \
+    yum -y install socat && \
+    yum install aria2 -y && \
+    yum clean all -y
 
 ADD docker/install_waitforit.sh /root/
 RUN /root/install_waitforit.sh

@@ -113,10 +113,18 @@ init_nexus() {
     nexus_raw_hosted "${nexus_http_prefix}" "files"
 
     # see: https://books.sonatype.com/nexus-book/3.0/reference/docker.html
+    local docker_registries=""
     nexus_docker_hosted "${nexus_http_prefix}" "docker-hosted" "http" "5000"
+    docker_registries="${docker_registries},docker-hosted"
     nexus_docker_proxy "${nexus_http_prefix}" "docker-central-163" "http" "5002" "http://hub-mirror.c.163.com" "HUB"
+    docker_registries="${docker_registries},docker-central-163"
     nexus_docker_proxy "${nexus_http_prefix}" "docker-central-hub" "http" "5003" "https://registry-1.docker.io" "HUB"
-    nexus_docker_group "${nexus_http_prefix}" "docker-public" "http" "5001" "docker-hosted,docker-central-163,docker-central-hub"
+    docker_registries="${docker_registries},docker-central-hub"
+    if [ ! -z "${DOCKER_MIRROR_GCR}" ]; then
+        nexus_docker_proxy "${nexus_http_prefix}" "docker-mirror-gcr" "http" "5004" "${DOCKER_MIRROR_GCR}" "REGISTRY"
+        docker_registries="${docker_registries},docker-mirror-gcr"
+    fi
+    nexus_docker_group "${nexus_http_prefix}" "docker-public" "http" "5001" "${docker_registries}"
 
     # proxy https://registry.npmjs.org, see: https://books.sonatype.com/nexus-book/3.0/reference/npm.html
     nexus_npm_proxy "${nexus_http_prefix}" "npm-central-taobao" "https://registry.npm.taobao.org"
