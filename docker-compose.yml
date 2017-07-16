@@ -19,9 +19,9 @@ services:
     # mirror: docker-public@5001
     - "5001:5001/tcp"
     # proxy: docker-central-163@5002
-    - "5002/tcp"
+    #- "5002/tcp"
     # proxy: docker-central-hub@5003
-    - "5003/tcp"
+    #- "5003/tcp"
     volumes:
     - volume-nexus3-nexus-data:/nexus-data
     #- ./keystore.jks:/nexus-data/keystore.jks
