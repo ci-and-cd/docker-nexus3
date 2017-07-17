@@ -97,3 +97,9 @@ see: https://github.com/clearent/nexus
 see: https://github.com/sonatype/docker-nexus3/blob/master/Dockerfile
 see: http://www.sonatype.org/nexus/2015/09/22/docker-and-nexus-3-ready-set-action/
 see: http://codeheaven.io/using-nexus-3-as-your-repository-part-3-docker-images/
+
+## TODO
+
+Use the official REST API to interact with nexus3
+
+see: http://books.sonatype.com/nexus-book/reference3/scripting.html
