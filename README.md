@@ -91,6 +91,10 @@ projectRoot/package.json
     bower register example-package git://gitserver/project.git
     bower install example-package
 
+## Note
+
+Do not use NFS on nexus3.
+
 ## References
 
 see: https://github.com/clearent/nexus
