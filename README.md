@@ -93,7 +93,23 @@ projectRoot/package.json
 
 ## Note
 
+Default admin username/password is: admin/admin123
+Default deploy (in maven's settings.xml) username/password is: deployment/deployment
+
 Do not use NFS on nexus3.
+
+
+## LDAP
+
+1. Make sure DNS is ok, LDAP server is accessible from nexus3.
+
+2. LDAP connection
+
+![](src/site/markdown/images/nexus3-01.png)
+
+3. LDAP user and group
+
+![](src/site/markdown/images/nexus3-02.png)
 
 ## References
 
