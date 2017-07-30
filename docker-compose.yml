@@ -10,8 +10,8 @@ services:
     image: ${DOCKER_REGISTRY:-home1oss}/nexus3:3.4.0
     restart: always
     command: ["bin/nexus", "run"]
-    container_name: ${NEXUS3_HOSTNAME:-nexus3.local}
-    hostname: ${NEXUS3_HOSTNAME:-nexus3.local}
+    container_name: ${NEXUS3_DOMAIN:-nexus3}.${INFRASTRUCTURE:-local}
+    hostname: ${NEXUS3_DOMAIN:-nexus3}.${INFRASTRUCTURE:-local}
     ports:
     - "${NEXUS3_PORT:-28081}:${NEXUS3_PORT:-28081}"
     # registry: docker-hosted@5000
@@ -35,7 +35,7 @@ services:
     - NEXUS_CONTEXT=${NEXUS3_CONTEXT:-nexus}
     - NEXUS3_CONTEXT=${NEXUS3_CONTEXT:-nexus}
     - NEXUS3_DEPLOYMENT_PASSWORD=${NEXUS3_DEPLOYMENT_PASSWORD:-deployment}
-    - NEXUS3_HOSTNAME=${NEXUS3_HOSTNAME:-nexus3.local}
+    - NEXUS3_HOSTNAME=${NEXUS3_DOMAIN:-nexus3}.${INFRASTRUCTURE:-local}
     - NEXUS3_PORT=${NEXUS3_PORT:-28081}
 
 networks:
