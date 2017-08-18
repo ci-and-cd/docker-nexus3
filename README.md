@@ -8,7 +8,7 @@ Environment variables
 
   Local nexus3 can set up a company's internal nexus2 or nexus3 as upstream
 
-    export INTERNAL_NEXUS3=<http://nexus3.internal>
+    export INTERNAL_NEXUS3=<http://nexus3.internal:28081>
 
 Start
 
