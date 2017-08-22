@@ -113,9 +113,9 @@ init_nexus() {
     nexus_raw_hosted "${nexus_http_prefix}" "files"
 
     # see: https://books.sonatype.com/nexus-book/3.0/reference/docker.html
-    local docker_registries=""
     nexus_docker_hosted "${nexus_http_prefix}" "docker-hosted" "http" "5000"
-    docker_registries="${docker_registries},docker-hosted"
+    local docker_registries=""
+    #docker_registries="${docker_registries},docker-hosted"
     nexus_docker_proxy "${nexus_http_prefix}" "docker-central-hub" "http" "5003" "https://registry-1.docker.io" "HUB"
     docker_registries="${docker_registries},docker-central-hub"
     if [ ! -z "${DOCKER_MIRROR_GCR}" ]; then
