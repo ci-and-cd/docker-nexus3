@@ -1,5 +1,5 @@
 
-FROM sonatype/nexus3:3.3.1
+FROM sonatype/nexus3:3.8.0
 
 ARG build_fileserver
 
@@ -16,5 +16,6 @@ COPY docker/entrypoint.sh /opt/sonatype/nexus/entrypoint.sh
 RUN chmod 755 /opt/sonatype/nexus/*.sh
 
 USER nexus
+WORKDIR /opt/sonatype/nexus
 ENTRYPOINT ["/opt/sonatype/nexus/entrypoint.sh"]
 CMD ["bin/nexus", "run"]
