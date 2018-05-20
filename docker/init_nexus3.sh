@@ -6,7 +6,7 @@ if [ -z "${NEXUS_ADDRESS}" ]; then NEXUS_ADDRESS="${NEXUS3_HOSTNAME}:8081"; fi
 init_nexus() {
     if type -p waitforit > /dev/null; then
         #  -debug
-        waitforit -full-connection=tcp://${NEXUS_ADDRESS} -timeout=180
+        waitforit -address=tcp://${NEXUS_ADDRESS} -timeout=180
         local nexus_running="$?"
         echo "nexus_running: ${nexus_running}"
         if [ ${nexus_running} -gt 0 ]; then
@@ -143,6 +143,7 @@ init_nexus() {
     echo "init_nexus done"
 }
 
+echo "init_nexus3.sh pwd: $(pwd)"
 init_nexus
 
 if [ ! -z "${NEXUS3_PORT}" ] && [ "${NEXUS3_PORT}" != "8081" ]; then

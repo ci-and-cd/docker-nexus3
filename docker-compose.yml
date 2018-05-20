@@ -7,9 +7,9 @@ services:
       dockerfile: Dockerfile
       args:
       - build_fileserver=https://github.com
-    image: ${DOCKER_REGISTRY:-home1oss}/nexus3:3.4.0
+    image: ${DOCKER_REGISTRY:-home1oss}/nexus3:3.11.0
     restart: always
-    command: ["bin/nexus", "run"]
+    command: ["/opt/sonatype/start-nexus-repository-manager.sh"]
     container_name: ${NEXUS3_DOMAIN:-nexus3}.${INFRASTRUCTURE:-local}
     hostname: ${NEXUS3_DOMAIN:-nexus3}.${INFRASTRUCTURE:-local}
     ports:

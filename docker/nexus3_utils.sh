@@ -357,7 +357,8 @@ nexus_docker_proxy() {
         {
           \"attributes\": {
             \"docker\": {
-              ${port},
+              \"forceBasicAuth\": false,
+              \"httpPort\": ${port},
               \"v1Enabled\": true
             },
             \"proxy\": {
@@ -429,7 +430,8 @@ nexus_docker_hosted() {
         {
           \"attributes\": {
             \"docker\": {
-              ${port},
+              \"forceBasicAuth\": false,
+              \"httpPort\": ${port},
               \"v1Enabled\": true
             },
             \"storage\": {
@@ -482,7 +484,8 @@ nexus_docker_group() {
         {
           \"attributes\": {
             \"docker\": {
-              ${port},
+              \"forceBasicAuth\": false,
+              \"httpPort\": ${port},
               \"v1Enabled\": true
             },
             \"storage\": {

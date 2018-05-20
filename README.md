@@ -9,45 +9,36 @@ Environment variables
   Local nexus3 can set up a company's internal nexus2 or nexus3 as upstream
 
     export INTERNAL_NEXUS3=<http://nexus3.internal:28081>
+  or
+    export INTERNAL_NEXUS2=<http://nexus2.internal:28081>
+
+Build
+
+    docker-compose build
 
 Start
 
     docker-compose up -d
 
-Issue: Must login (even read only access) before use.
-see: [add anonymous read access support for docker repositories](https://issues.sonatype.org/browse/NEXUS-10813)
+## Note
 
-Login
+Default admin username/password is: admin/admin123
+Default deploy (in maven's settings.xml) username/password is: deployment/deployment
 
-    docker login -u deployment -p deployment registry.docker.local
-    docker login -u deployment -p deployment registry.docker.local:5000
-    docker login -u deployment -p deployment registry.docker.local:5002
-    docker login -u deployment -p deployment registry.docker.local:5003
-    cat ~/.docker/config.json
+Do not use NFS on nexus3.
 
-## Test Docker registry and mirror
 
-    docker search registry.docker.local/alpine
-    docker pull registry.docker.local/alpine
-    docker tag nginx:1.11.5-alpine registry.docker.local:5000/nginx:1.11.5-alpine
-    docker push registry.docker.local:5000/nginx:1.11.5-alpine
-    
-    # Test docker mirror of gcr.io
-    docker pull mirror.docker.local/google_containers/kube-dnsmasq-amd64:1.4
-    curl http://mirror.docker.local/v2/_catalog
-    curl http://mirror.docker.local/v2/google_containers/kube-dnsmasq-amd64/tags/list
+## LDAP
 
-## TODO Nexus3 With SSL:
+1. Make sure DNS is ok, LDAP server is accessible from nexus3.
 
-see: https://books.sonatype.com/nexus-book/3.0/reference/security.html#ssl-inbound
-see: http://www.eclipse.org/jetty/documentation/current/configuring-ssl.html
+2. LDAP connection
 
-keytool -keystore keystore -alias jetty -genkeypair -keyalg RSA \
--storepass changeit -keypass changeit -keysize 2048 -validity 5000 \
--dname "CN=*.${NEXUS3_DOMAIN}, OU=Example, O=Sonatype, L=Unspecified, ST=Unspecified, C=US" \
--ext "SAN=DNS:${NEXUS3_DOMAIN},IP:${NEXUS_IP_ADDRESS}" -ext "BC=ca:true" \
+![](src/site/markdown/images/nexus3-01.png)
 
-keytool -keystore keystore -alias jetty -genkey -keyalg RSA -sigalg SHA256withRSA -ext 'SAN=dns:jetty.eclipse.org,dns:*.jetty.org'
+3. LDAP user and group
+
+![](src/site/markdown/images/nexus3-02.png)
 
 ## Use as npm registry:
 
@@ -91,25 +82,46 @@ projectRoot/package.json
     bower register example-package git://gitserver/project.git
     bower install example-package
 
-## Note
+## Use as Docker registry and mirror
 
-Default admin username/password is: admin/admin123
-Default deploy (in maven's settings.xml) username/password is: deployment/deployment
+Issue: Must login (even read only access) before use.
+see: [add anonymous read access support for docker repositories](https://issues.sonatype.org/browse/NEXUS-10813)
 
-Do not use NFS on nexus3.
+Login
 
+    docker login -u deployment -p deployment registry.docker.local
+    docker login -u deployment -p deployment registry.docker.local:5000
+    docker login -u deployment -p deployment registry.docker.local:5002
+    docker login -u deployment -p deployment registry.docker.local:5003
+    cat ~/.docker/config.json
 
-## LDAP
+    docker search registry.docker.local/alpine
+    docker pull registry.docker.local/alpine
+    docker tag nginx:1.11.5-alpine registry.docker.local:5000/nginx:1.11.5-alpine
+    docker push registry.docker.local:5000/nginx:1.11.5-alpine
+    
+    # Test docker mirror of gcr.io
+    docker pull mirror.docker.local/google_containers/kube-dnsmasq-amd64:1.4
+    curl http://mirror.docker.local/v2/_catalog
+    curl http://mirror.docker.local/v2/google_containers/kube-dnsmasq-amd64/tags/list
 
-1. Make sure DNS is ok, LDAP server is accessible from nexus3.
+## TODO
 
-2. LDAP connection
+Use the official REST API to interact with nexus3
 
-![](src/site/markdown/images/nexus3-01.png)
+see: http://books.sonatype.com/nexus-book/reference3/scripting.html
 
-3. LDAP user and group
+### TODO Nexus3 With SSL:
 
-![](src/site/markdown/images/nexus3-02.png)
+see: https://books.sonatype.com/nexus-book/3.0/reference/security.html#ssl-inbound
+see: http://www.eclipse.org/jetty/documentation/current/configuring-ssl.html
+
+keytool -keystore keystore -alias jetty -genkeypair -keyalg RSA \
+-storepass changeit -keypass changeit -keysize 2048 -validity 5000 \
+-dname "CN=*.${NEXUS3_DOMAIN}, OU=Example, O=Sonatype, L=Unspecified, ST=Unspecified, C=US" \
+-ext "SAN=DNS:${NEXUS3_DOMAIN},IP:${NEXUS_IP_ADDRESS}" -ext "BC=ca:true" \
+
+keytool -keystore keystore -alias jetty -genkey -keyalg RSA -sigalg SHA256withRSA -ext 'SAN=dns:jetty.eclipse.org,dns:*.jetty.org'
 
 ## References
 
@@ -117,9 +129,3 @@ see: https://github.com/clearent/nexus
 see: https://github.com/sonatype/docker-nexus3/blob/master/Dockerfile
 see: http://www.sonatype.org/nexus/2015/09/22/docker-and-nexus-3-ready-set-action/
 see: http://codeheaven.io/using-nexus-3-as-your-repository-part-3-docker-images/
-
-## TODO
-
-Use the official REST API to interact with nexus3
-
-see: http://books.sonatype.com/nexus-book/reference3/scripting.html
