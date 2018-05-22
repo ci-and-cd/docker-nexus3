@@ -1,5 +1,5 @@
 
-version: '2.1'
+version: '3.6'
 services:
   nexus3:
     build:
@@ -40,8 +40,8 @@ services:
 
 networks:
   default:
-    external:
-      name: oss-network
+    external: true
+    name: oss-network
 
 volumes:
   volume-nexus3-nexus-data: {}
