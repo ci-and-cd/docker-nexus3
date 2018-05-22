@@ -28,9 +28,9 @@ services:
     environment:
     - DOCKER_MIRROR_GCR=${DOCKER_MIRROR_GCR:-http://gcr.io.local:5000}
     # http://nexus3.internal:28081
-    - INTERNAL_NEXUS3=${INTERNAL_NEXUS3}
+    - INTERNAL_NEXUS3=${INTERNAL_NEXUS3:-}
     # http://nexus2.internal
-    #- INTERNAL_NEXUS2=${INTERNAL_NEXUS2}
+    #- INTERNAL_NEXUS2=${INTERNAL_NEXUS2:-}
     #- JKS_PASSWORD=changeit
     - NEXUS_CONTEXT=${NEXUS3_CONTEXT:-nexus}
     - NEXUS3_CONTEXT=${NEXUS3_CONTEXT:-nexus}
