@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
       - build_fileserver=https://github.com
-    image: ${DOCKER_REGISTRY:-home1oss}/nexus3:3.11.0
+    image: ${DOCKER_REGISTRY:-home1oss}/nexus3:3.12.0
     restart: always
     command: ["/opt/sonatype/start-nexus-repository-manager.sh"]
     container_name: ${NEXUS3_DOMAIN:-nexus3}.${INFRASTRUCTURE:-local}
@@ -28,9 +28,9 @@ services:
     environment:
     - DOCKER_MIRROR_GCR=${DOCKER_MIRROR_GCR:-http://gcr.io.local:5000}
     # http://nexus3.internal:28081
-    - INTERNAL_NEXUS3=${INTERNAL_NEXUS3:-}
+    - INFRASTRUCTURE_INTERNAL_NEXUS3=${INFRASTRUCTURE_INTERNAL_NEXUS3:-}
     # http://nexus2.internal
-    #- INTERNAL_NEXUS2=${INTERNAL_NEXUS2:-}
+    #- INFRASTRUCTURE_INTERNAL_NEXUS2=${INFRASTRUCTURE_INTERNAL_NEXUS2:-}
     #- JKS_PASSWORD=changeit
     - NEXUS_CONTEXT=${NEXUS3_CONTEXT:-nexus}
     - NEXUS3_CONTEXT=${NEXUS3_CONTEXT:-nexus}

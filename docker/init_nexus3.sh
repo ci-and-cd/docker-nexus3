@@ -74,31 +74,31 @@ init_nexus() {
 
     # nexus.internal
     # nexus2 /nexus/content/groups/public/
-    if [[ "${INTERNAL_NEXUS2}" == http* ]]; then
-        nexus_maven2_proxy "internal-nexus2.snapshot" "SNAPSHOT" "${INTERNAL_NEXUS2}/nexus/content/groups/public/"
+    if [[ "${INFRASTRUCTURE_INTERNAL_NEXUS2}" == http* ]]; then
+        nexus_maven2_proxy "internal-nexus2.snapshot" "SNAPSHOT" "${INFRASTRUCTURE_INTERNAL_NEXUS2}/nexus/content/groups/public/"
         maven_group_members="${maven_group_members},internal-nexus2.snapshot"
-        nexus_maven2_proxy "internal-nexus2.release" "RELEASE" "${INTERNAL_NEXUS2}/nexus/content/groups/public/"
+        nexus_maven2_proxy "internal-nexus2.release" "RELEASE" "${INFRASTRUCTURE_INTERNAL_NEXUS2}/nexus/content/groups/public/"
         maven_group_members="${maven_group_members},internal-nexus2.release"
     fi
     # nexus3 /nexus/repository/maven-public/
-    if [[ "${INTERNAL_NEXUS3}" == http* ]]; then
-        nexus_maven2_proxy "internal-nexus3.snapshot" "SNAPSHOT" "${INTERNAL_NEXUS3}/nexus/repository/maven-public/"
+    if [[ "${INFRASTRUCTURE_INTERNAL_NEXUS3}" == http* ]]; then
+        nexus_maven2_proxy "internal-nexus3.snapshot" "SNAPSHOT" "${INFRASTRUCTURE_INTERNAL_NEXUS3}/nexus/repository/maven-public/"
         maven_group_members="${maven_group_members},internal-nexus3.snapshot"
-        nexus_maven2_proxy "internal-nexus3.release" "RELEASE" "${INTERNAL_NEXUS3}/nexus/repository/maven-public/"
+        nexus_maven2_proxy "internal-nexus3.release" "RELEASE" "${INFRASTRUCTURE_INTERNAL_NEXUS3}/nexus/repository/maven-public/"
         maven_group_members="${maven_group_members},internal-nexus3.release"
     fi
 
     nexus_maven_group "maven-public" "${maven_group_members}"
 
     # Raw Repositories, Maven Sites and More see: https://books.sonatype.com/nexus-book/3.0/reference/raw.html
-    #nexus_raw_proxy "npm-dist" "https://nodejs.org/dist/"
+    #nexus_raw_proxy "node-dist" "https://nodejs.org/dist/"
     # https://npm.taobao.org/dist is same as https://npm.taobao.org/mirrors/node/
-    nexus_raw_proxy "npm-dist-taobao" "https://npm.taobao.org/dist/"
-    nexus_raw_proxy "npm-dist-official" "https://nodejs.org/dist/"
-    nexus_raw_group "npm-dist" "npm-dist-taobao,npm-dist-official"
-    nexus_raw_proxy "npm-sass-taobao" "https://npm.taobao.org/mirrors/node-sass/"
-    nexus_raw_proxy "npm-sass-official" "https://github.com/sass/node-sass/releases/"
-    nexus_raw_group "npm-sass" "npm-sass-taobao,npm-sass-official"
+    nexus_raw_proxy "node-dist-taobao" "https://npm.taobao.org/dist/"
+    nexus_raw_proxy "node-dist-official" "https://nodejs.org/dist/"
+    nexus_raw_group "node-dist" "node-dist-taobao,node-dist-official"
+    nexus_raw_proxy "node-sass-taobao" "https://npm.taobao.org/mirrors/node-sass/"
+    nexus_raw_proxy "node-sass-official" "https://github.com/sass/node-sass/releases/"
+    nexus_raw_group "node-sass" "node-sass-taobao,node-sass-official"
     nexus_raw_hosted "mvnsite"
     nexus_raw_hosted "files"
 
