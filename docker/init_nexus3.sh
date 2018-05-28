@@ -67,10 +67,15 @@ init_nexus() {
     nexus_maven2_proxy "sonatype-snapshots" "SNAPSHOT" "https://oss.sonatype.org/content/repositories/snapshots/"
     maven_group_members="${maven_group_members},sonatype-snapshots"
 
-    nexus_maven2_proxy "github-chshawkn-wagon-maven-plugin" "RELEASE" "https://raw.github.com/chshawkn/wagon-maven-plugin/mvn-repo/"
-    maven_group_members="${maven_group_members},github-chshawkn-wagon-maven-plugin"
-    nexus_maven2_proxy "github-chshawkn-maven-settings-decoder" "RELEASE" "https://raw.github.com/chshawkn/maven-settings-decoder/mvn-repo/"
-    maven_group_members="${maven_group_members},github-chshawkn-maven-settings-decoder"
+    # Forked github-maven-plugins that upload faster
+    nexus_maven2_proxy "github-mvn-repo-github-maven-plugins" "RELEASE" "https://raw.github.com/ci-and-cd/maven-plugins/mvn-repo/"
+    maven_group_members="${maven_group_members},github-mvn-repo-github-maven-plugins"
+    # decrypt maven repository password for gradle build
+    nexus_maven2_proxy "github-mvn-repo-maven-settings-decoder" "RELEASE" "https://raw.github.com/ci-and-cd/maven-settings-decoder/mvn-repo/"
+    maven_group_members="${maven_group_members},github-mvn-repo-maven-settings-decoder"
+    # Fixed issue of merge snapshotVersion
+    nexus_maven2_proxy "github-mvn-repo-wagon-maven-plugin" "RELEASE" "https://raw.github.com/ci-and-cd/wagon-maven-plugin/mvn-repo/"
+    maven_group_members="${maven_group_members},github-mvn-repo-wagon-maven-plugin"
 
     # nexus.internal
     # nexus2 /nexus/content/groups/public/
