@@ -89,21 +89,21 @@ see: [add anonymous read access support for docker repositories](https://issues.
 
 Login
 
-    docker login -u deployment -p deployment registry.docker.local
-    docker login -u deployment -p deployment registry.docker.local:5000
-    docker login -u deployment -p deployment registry.docker.local:5002
-    docker login -u deployment -p deployment registry.docker.local:5003
+    #docker login -u deployment -p deployment nexus3.local
+    docker login -u deployment -p deployment nexus3.local:5000
+    docker login -u deployment -p deployment nexus3.local:5002
+    docker login -u deployment -p deployment nexus3.local:5003
     cat ~/.docker/config.json
 
-    docker search registry.docker.local/alpine
-    docker pull registry.docker.local/alpine
-    docker tag nginx:1.11.5-alpine registry.docker.local:5000/nginx:1.11.5-alpine
-    docker push registry.docker.local:5000/nginx:1.11.5-alpine
+    docker search nexus3.local:5000/alpine
+    docker pull nexus3.local:5000/alpine
+    docker tag nginx:1.11.5-alpine nexus3.local:5000/nginx:1.11.5-alpine
+    docker push nexus3.local:5000/nginx:1.11.5-alpine
     
     # Test docker mirror of gcr.io
-    docker pull mirror.docker.local/google_containers/kube-dnsmasq-amd64:1.4
-    curl http://mirror.docker.local/v2/_catalog
-    curl http://mirror.docker.local/v2/google_containers/kube-dnsmasq-amd64/tags/list
+    docker pull nexus3.local:5001/google_containers/kube-dnsmasq-amd64:1.4
+    curl http://nexus3.local:5001/v2/_catalog
+    curl http://nexus3.local:5001/v2/google_containers/kube-dnsmasq-amd64/tags/list
 
 ## TODO
 
