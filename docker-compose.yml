@@ -3,6 +3,7 @@ version: '2.1'
 services:
   nexus3-develop:
     extends:
+      file: docker-compose-base.yml
       service: base-nexus3
     container_name: ${INSTANCE_NAME:-nexus3}.${INSTANCE_DOMAIN:-local}
     hostname: ${INSTANCE_NAME:-nexus3}.${INSTANCE_DOMAIN:-local}
