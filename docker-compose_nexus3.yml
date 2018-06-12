@@ -1,15 +1,12 @@
 
 version: '2.1'
 services:
-  nexus3-develop:
+  nexus3:
     extends:
       service: base-nexus3
-    container_name: ${INSTANCE_NAME:-nexus3}.${INSTANCE_DOMAIN:-local}
-    hostname: ${INSTANCE_NAME:-nexus3}.${INSTANCE_DOMAIN:-local}
-    networks:
-      local-network:
-        ipv4_address: 172.16.238.133
-        ipv6_address: 2001:3984:3989::133
+    container_name: ${INSTANCE_NAME:-nexus3}.${INSTANCE_DOMAIN:-internal}
+    hostname: ${INSTANCE_NAME:-nexus3}.${INSTANCE_DOMAIN:-internal}
+    network_mode: bridge
     ports:
     - "${NEXUS3_PORT:-28081}:${NEXUS3_PORT:-28081}"
     # registry: docker-hosted@5000
@@ -23,17 +20,6 @@ services:
     volumes:
     - data:/nexus-data
     #- ./data/keystore.jks:/nexus-data/keystore.jks
-
-networks:
-  local-network:
-    external: true
-    driver: bridge
-    enable_ipv6: true
-    ipam:
-      driver: default
-      config:
-      - subnet: 172.16.238.0/24
-      - subnet: 2001:3984:3989::/64
 
 volumes:
   data:
