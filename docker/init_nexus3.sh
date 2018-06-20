@@ -41,6 +41,8 @@ init_nexus() {
     nexus_maven2_proxy "spring-libs-milestone-local" "RELEASE" "http://repo.spring.io/libs-milestone-local"
     nexus_maven2_proxy "spring-libs-snapshot-local" "SNAPSHOT" "http://repo.spring.io/libs-snapshot-local"
     maven_group_members="${maven_group_members},spring-libs-release-local,spring-libs-milestone-local,spring-libs-snapshot-local"
+    nexus_maven2_proxy "groovy-bintray" "RELEASE" "https://dl.bintray.com/groovy/maven"
+    maven_group_members="${maven_group_members},groovy-bintray"
     # http://conjars.org
     nexus_maven2_proxy "conjars.org" "RELEASE" "http://conjars.org/repo/"
     maven_group_members="${maven_group_members},conjars.org"
