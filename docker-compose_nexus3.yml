@@ -11,13 +11,13 @@ services:
     ports:
     - "${NEXUS3_PORT:-28081}:${NEXUS3_PORT:-28081}"
     # registry: docker-hosted@5000
-    - "5000:5000/tcp"
+    - "${NEXUS3_DOCKER_HOSTED_PORT:-5000}:5000/tcp"
     # mirror: docker-public@5001
-    - "5001:5001/tcp"
+    - "${NEXUS3_DOCKER_PUBLIC_PORT:-5001}:5001/tcp"
     # proxy: docker-central-163@5002
-    #- "5002/tcp"
+    #- "${NEXUS3_DOCKER_PROXY_163_PORT:-5002}:5002/tcp"
     # proxy: docker-central-hub@5003
-    #- "5003/tcp"
+    #- "${NEXUS3_DOCKER_PROXY_HUB_PORT:-5003}:5003/tcp"
     volumes:
     - data:/nexus-data
     #- ./data/keystore.jks:/nexus-data/keystore.jks
