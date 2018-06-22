@@ -21,5 +21,5 @@ services:
     - NEXUS3_DEPLOYMENT_PASSWORD=${NEXUS3_DEPLOYMENT_PASSWORD:-deployment}
     - NEXUS3_HOSTNAME=${INSTANCE_NAME:-nexus3}.${INSTANCE_DOMAIN:-local}
     - NEXUS3_PORT=${NEXUS3_PORT:-28081}
-    image: ${IMAGE_PREFIX:-cirepo}/nexus3:${IMAGE_VERSION:-3.12.0}
+    image: ${IMAGE_PREFIX:-cirepo}/nexus3:${IMAGE_VERSION:-3.12.1}
     restart: always

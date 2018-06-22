@@ -1,5 +1,6 @@
+# see: https://github.com/sonatype/docker-nexus3/blob/master/Dockerfile
 
-FROM sonatype/nexus3:3.12.0
+FROM sonatype/nexus3:3.12.1
 
 ARG build_fileserver
 ENV ARIA2C_DOWNLOAD aria2c --file-allocation=none -c -x 10 -s 10 -m 0 --console-log-level=notice --log-level=notice --summary-interval=0

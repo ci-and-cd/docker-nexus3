@@ -110,18 +110,22 @@ init_nexus() {
     nexus_raw_hosted "files"
 
     # see: https://books.sonatype.com/nexus-book/3.0/reference/docker.html
-    nexus_docker_hosted "docker-hosted" "http" "5000"
+    if [ -z "${NEXUS3_DOCKER_HOSTED_PORT}" ]; then NEXUS3_DOCKER_HOSTED_PORT="5000"; fi
+    if [ -z "${NEXUS3_DOCKER_PUBLIC_PORT}" ]; then NEXUS3_DOCKER_PUBLIC_PORT="5001"; fi
+    if [ -z "${NEXUS3_DOCKER_PROXY_163_PORT}" ]; then NEXUS3_DOCKER_PROXY_163_PORT="5002"; fi
+    if [ -z "${NEXUS3_DOCKER_PROXY_HUB_PORT}" ]; then NEXUS3_DOCKER_PROXY_HUB_PORT="5003"; fi
+    nexus_docker_hosted "docker-hosted" "http" "${NEXUS3_DOCKER_HOSTED_PORT}"
     local docker_registries=""
     #docker_registries="${docker_registries},docker-hosted"
-    nexus_docker_proxy "docker-central-hub" "http" "5003" "https://registry-1.docker.io" "HUB"
+    nexus_docker_proxy "docker-central-hub" "http" "${NEXUS3_DOCKER_PROXY_HUB_PORT}" "https://registry-1.docker.io" "HUB"
     docker_registries="${docker_registries},docker-central-hub"
     if [ ! -z "${DOCKER_MIRROR_GCR}" ]; then
         nexus_docker_proxy "docker-mirror-gcr" "http" "5004" "${DOCKER_MIRROR_GCR}" "REGISTRY"
         docker_registries="${docker_registries},docker-mirror-gcr"
     fi
-    nexus_docker_proxy "docker-central-163" "http" "5002" "http://hub-mirror.c.163.com" "HUB"
+    nexus_docker_proxy "docker-central-163" "http" "${NEXUS3_DOCKER_PROXY_163_PORT}" "http://hub-mirror.c.163.com" "HUB"
     docker_registries="${docker_registries},docker-central-163"
-    nexus_docker_group "docker-public" "http" "5001" "${docker_registries}"
+    nexus_docker_group "docker-public" "http" "${NEXUS3_DOCKER_PUBLIC_PORT}" "${docker_registries}"
 
     # proxy https://registry.npmjs.org, see: https://books.sonatype.com/nexus-book/3.0/reference/npm.html
     nexus_npm_proxy "npm-central-taobao" "https://registry.npm.taobao.org"
