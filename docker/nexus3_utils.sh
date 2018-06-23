@@ -367,7 +367,7 @@ nexus_docker_proxy() {
       \"data\": [
         {
           \"attributes\": {
-            \"docker\":{${port},\"forceBasicAuth\":false,\"v1Enabled\":false},
+            \"docker\":{${port},\"forceBasicAuth\":true,\"v1Enabled\":false},
             \"proxy\":{\"remoteUrl\":\"${4}\",\"contentMaxAge\":${timeToLive},\"metadataMaxAge\":${timeToLive}},
             \"dockerProxy\":{${index},\"useTrustStoreForIndexAccess\": false},
             \"httpclient\": {
