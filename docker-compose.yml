@@ -5,8 +5,8 @@ services:
     extends:
       file: docker-compose-base.yml
       service: base-nexus3
-    container_name: ${INSTANCE_NAME:-nexus3}.${INFRASTRUCTURE_DOMAIN:-local}
-    hostname: ${INSTANCE_NAME:-nexus3}.${INFRASTRUCTURE_DOMAIN:-local}
+    container_name: ${INSTANCE_NAME:-nexus3}.${INSTANCE_DOMAIN:-local}
+    hostname: ${INSTANCE_NAME:-nexus3}.${INSTANCE_DOMAIN:-local}
     networks:
       local-network:
         ipv4_address: 172.16.238.31
@@ -23,7 +23,6 @@ services:
     #- "${NEXUS3_DOCKER_PROXY_HUB_PORT:-5003}/tcp"
     volumes:
     - data:/nexus-data
-    #- ./data/keystore.jks:/nexus-data/keystore.jks
 
 networks:
   local-network:
