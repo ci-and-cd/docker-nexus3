@@ -429,7 +429,7 @@ nexus_docker_hosted() {
       \"data\": [
         {
           \"attributes\": {
-            \"docker\":{${port},\"forceBasicAuth\":false,\"v1Enabled\":true},
+            \"docker\":{${port},\"forceBasicAuth\":true,\"v1Enabled\":true},
             \"storage\": {
               \"blobStoreName\": \"default\",
               \"strictContentTypeValidation\": true,
@@ -479,7 +479,7 @@ nexus_docker_group() {
       \"data\": [
         {
           \"attributes\": {
-            \"docker\":{${port},\"forceBasicAuth\":false,\"v1Enabled\":true},
+            \"docker\":{${port},\"forceBasicAuth\":true,\"v1Enabled\":true},
             \"storage\": {
               \"blobStoreName\": \"default\",
               \"strictContentTypeValidation\": true
