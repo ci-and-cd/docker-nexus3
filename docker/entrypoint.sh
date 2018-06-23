@@ -19,9 +19,6 @@ if [ "$1" == "/opt/sonatype/start-nexus-repository-manager.sh" ]; then
             sed -e "\|application-port|a\application-port-ssl=8443" -i "${NEXUS_HOME}/etc/nexus-default.properties"
     fi
 
-    # Short term workaround of issue "Insufficient configured threads"
-    #see: https://issues.sonatype.org/browse/NEXUS-16565
-    sed -i 's|<Set name="maxThreads">200</Set>|<Set name="maxThreads">400</Set>|' ${NEXUS_HOME}/etc/jetty/jetty.xml
     grep maxThreads ${NEXUS_HOME}/etc/jetty/jetty.xml
 
     bash /init_nexus3.sh &

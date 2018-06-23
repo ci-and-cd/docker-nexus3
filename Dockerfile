@@ -16,6 +16,13 @@ RUN yum install epel-release -y \
     && ${ARIA2C_DOWNLOAD} -d /usr/bin -o "waitforit" "http://o9wbz99tz.bkt.clouddn.com/maxcnunes/waitforit/releases/download/v2.2.0/waitforit-linux_amd64" \
     && chmod 755 /usr/bin/waitforit
 
+# Short term workaround of issue "Insufficient configured threads"
+#see: https://issues.sonatype.org/browse/NEXUS-16565
+RUN cat ${NEXUS_HOME}/etc/jetty/jetty.xml \
+    && grep threadpool ${NEXUS_HOME}/etc/jetty/jetty.xml \
+    && sed -i 's|<New id="threadpool" class="org.sonatype.nexus.bootstrap.jetty.InstrumentedQueuedThreadPool"/>|<New id="threadpool" class="org.sonatype.nexus.bootstrap.jetty.InstrumentedQueuedThreadPool"><Set name="maxThreads">400</Set></New>|' ${NEXUS_HOME}/etc/jetty/jetty.xml \
+    && grep threadpool ${NEXUS_HOME}/etc/jetty/jetty.xml
+
 COPY docker/nexus3_utils.sh /nexus3_utils.sh
 COPY docker/init_nexus3.sh /init_nexus3.sh
 COPY docker/entrypoint.sh /entrypoint.sh
