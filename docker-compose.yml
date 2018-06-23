@@ -6,6 +6,11 @@ services:
       file: docker-compose-base.yml
       service: base-nexus3
     container_name: ${INSTANCE_NAME:-nexus3}.${INSTANCE_DOMAIN:-local}
+    environment:
+    - NEXUS3_DOCKER_HOSTED_PORT=${NEXUS3_DOCKER_HOSTED_PORT:-5000}
+    - NEXUS3_DOCKER_PUBLIC_PORT=${NEXUS3_DOCKER_PUBLIC_PORT:-5001}
+    #- NEXUS3_DOCKER_PROXY_163_PORT=${NEXUS3_DOCKER_PROXY_163_PORT:-5002}
+    #- NEXUS3_DOCKER_PROXY_HUB_PORT=${NEXUS3_DOCKER_PROXY_HUB_PORT:-5003}
     hostname: ${INSTANCE_NAME:-nexus3}.${INSTANCE_DOMAIN:-local}
     networks:
       local-network:
