@@ -1,4 +1,8 @@
 
 *.iml
 
+.DS_Store
+
+*.bak
 *.jks
+
