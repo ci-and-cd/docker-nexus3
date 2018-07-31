@@ -26,6 +26,13 @@ init_nexus() {
     nexus_user "deployment" "${NEXUS3_DEPLOYMENT_PASSWORD}"
 
     local maven_group_members="maven-releases,maven-snapshots,maven-central"
+
+    # sonatype
+    nexus_maven2_proxy "sonatype-releases" "RELEASE" "https://oss.sonatype.org/content/repositories/releases/"
+    maven_group_members="${maven_group_members},sonatype-releases"
+    nexus_maven2_proxy "sonatype-snapshots" "SNAPSHOT" "https://oss.sonatype.org/content/repositories/snapshots/"
+    maven_group_members="${maven_group_members},sonatype-snapshots"
+
     # TODO nexus_maven2_hosted "maven-thirdparty" "SNAPSHOT"
     # TODO maven_group_members="${maven_group_members},maven-thirdparty"
     # https://github.com/spring-projects/spring-framework/wiki/Spring-repository-FAQ
@@ -43,6 +50,23 @@ init_nexus() {
     maven_group_members="${maven_group_members},spring-libs-release-local,spring-libs-milestone-local,spring-libs-snapshot-local"
     nexus_maven2_proxy "groovy-bintray" "RELEASE" "https://dl.bintray.com/groovy/maven"
     maven_group_members="${maven_group_members},groovy-bintray"
+
+    # proxy private nexus
+    # nexus2 /nexus/content/groups/public/
+    if [[ "${INFRASTRUCTURE_INTERNAL_NEXUS2}" == http* ]]; then
+        nexus_maven2_proxy "internal-nexus2.snapshot" "SNAPSHOT" "${INFRASTRUCTURE_INTERNAL_NEXUS2}/nexus/content/groups/public/"
+        maven_group_members="${maven_group_members},internal-nexus2.snapshot"
+        nexus_maven2_proxy "internal-nexus2.release" "RELEASE" "${INFRASTRUCTURE_INTERNAL_NEXUS2}/nexus/content/groups/public/"
+        maven_group_members="${maven_group_members},internal-nexus2.release"
+    fi
+    # nexus3 /nexus/repository/maven-public/
+    if [[ "${INFRASTRUCTURE_INTERNAL_NEXUS3}" == http* ]]; then
+        nexus_maven2_proxy "internal-nexus3.snapshot" "SNAPSHOT" "${INFRASTRUCTURE_INTERNAL_NEXUS3}/nexus/repository/maven-public/"
+        maven_group_members="${maven_group_members},internal-nexus3.snapshot"
+        nexus_maven2_proxy "internal-nexus3.release" "RELEASE" "${INFRASTRUCTURE_INTERNAL_NEXUS3}/nexus/repository/maven-public/"
+        maven_group_members="${maven_group_members},internal-nexus3.release"
+    fi
+
     # http://conjars.org
     nexus_maven2_proxy "conjars.org" "RELEASE" "http://conjars.org/repo/"
     maven_group_members="${maven_group_members},conjars.org"
@@ -63,12 +87,6 @@ init_nexus() {
     nexus_maven2_proxy "apache-snapshots" "SNAPSHOT" "https://repository.apache.org/content/repositories/snapshots/"
     maven_group_members="${maven_group_members},apache-snapshots"
 
-    # sonatype
-    nexus_maven2_proxy "sonatype-releases" "RELEASE" "https://oss.sonatype.org/content/repositories/releases/"
-    maven_group_members="${maven_group_members},sonatype-releases"
-    nexus_maven2_proxy "sonatype-snapshots" "SNAPSHOT" "https://oss.sonatype.org/content/repositories/snapshots/"
-    maven_group_members="${maven_group_members},sonatype-snapshots"
-
     # Forked github-maven-plugins that upload faster
     nexus_maven2_proxy "github-mvn-repo-github-maven-plugins" "RELEASE" "https://raw.github.com/ci-and-cd/maven-plugins/mvn-repo/"
     maven_group_members="${maven_group_members},github-mvn-repo-github-maven-plugins"
@@ -78,22 +96,6 @@ init_nexus() {
     # Fixed issue of merge snapshotVersion
     nexus_maven2_proxy "github-mvn-repo-wagon-maven-plugin" "RELEASE" "https://raw.github.com/ci-and-cd/wagon-maven-plugin/mvn-repo/"
     maven_group_members="${maven_group_members},github-mvn-repo-wagon-maven-plugin"
-
-    # nexus.internal
-    # nexus2 /nexus/content/groups/public/
-    if [[ "${INFRASTRUCTURE_INTERNAL_NEXUS2}" == http* ]]; then
-        nexus_maven2_proxy "internal-nexus2.snapshot" "SNAPSHOT" "${INFRASTRUCTURE_INTERNAL_NEXUS2}/nexus/content/groups/public/"
-        maven_group_members="${maven_group_members},internal-nexus2.snapshot"
-        nexus_maven2_proxy "internal-nexus2.release" "RELEASE" "${INFRASTRUCTURE_INTERNAL_NEXUS2}/nexus/content/groups/public/"
-        maven_group_members="${maven_group_members},internal-nexus2.release"
-    fi
-    # nexus3 /nexus/repository/maven-public/
-    if [[ "${INFRASTRUCTURE_INTERNAL_NEXUS3}" == http* ]]; then
-        nexus_maven2_proxy "internal-nexus3.snapshot" "SNAPSHOT" "${INFRASTRUCTURE_INTERNAL_NEXUS3}/nexus/repository/maven-public/"
-        maven_group_members="${maven_group_members},internal-nexus3.snapshot"
-        nexus_maven2_proxy "internal-nexus3.release" "RELEASE" "${INFRASTRUCTURE_INTERNAL_NEXUS3}/nexus/repository/maven-public/"
-        maven_group_members="${maven_group_members},internal-nexus3.release"
-    fi
 
     nexus_maven_group "maven-public" "${maven_group_members}"
 

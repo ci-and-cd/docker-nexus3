@@ -13,9 +13,9 @@ Environment variables
 
   Local nexus3 can set up a company's internal nexus2 or nexus3 as upstream
 
-    export INFRASTRUCTURE_INTERNAL_NEXUS2=<http://nexus2.internal:28081>
+    export INFRASTRUCTURE_INTERNAL_NEXUS2=<http://nexus2:28081>
   or
-    export INFRASTRUCTURE_INTERNAL_NEXUS3=<http://nexus3.internal:28081>
+    export INFRASTRUCTURE_INTERNAL_NEXUS3=<http://nexus3:28081>
 
 Build
 
@@ -87,28 +87,28 @@ see: [add anonymous read access support for docker repositories](https://issues.
 
 Login
 
-    #docker login -u deployment -p deployment nexus3.local
-    docker login -u deployment -p deployment nexus3.local:5000
-    docker login -u deployment -p deployment nexus3.local:5002
-    docker login -u deployment -p deployment nexus3.local:5003
+    #docker login -u deployment -p deployment nexus3
+    docker login -u deployment -p deployment nexus3:5000
+    docker login -u deployment -p deployment nexus3:5002
+    docker login -u deployment -p deployment nexus3:5003
     cat ~/.docker/config.json
 
-    docker search nexus3.local:5000/alpine
-    docker pull nexus3.local:5000/alpine
-    docker tag nginx:1.11.5-alpine nexus3.local:5000/nginx:1.11.5-alpine
-    docker push nexus3.local:5000/nginx:1.11.5-alpine
+    docker search nexus3:5000/alpine
+    docker pull nexus3:5000/alpine
+    docker tag nginx:1.11.5-alpine nexus3:5000/nginx:1.11.5-alpine
+    docker push nexus3:5000/nginx:1.11.5-alpine
     
     # Test docker mirror of gcr.io
-    docker pull nexus3.local:5001/google_containers/kube-dnsmasq-amd64:1.4
-    curl http://nexus3.local:5001/v2/_catalog
-    curl http://nexus3.local:5001/v2/google_containers/kube-dnsmasq-amd64/tags/list
+    docker pull nexus3:5001/google_containers/kube-dnsmasq-amd64:1.4
+    curl http://nexus3:5001/v2/_catalog
+    curl http://nexus3:5001/v2/google_containers/kube-dnsmasq-amd64/tags/list
 
 ## IV. Use as npm registry:
 
-    npm config set registry http://nexus3.local:28081/nexus/repository/npm-public/
+    npm config set registry http://nexus3:28081/nexus/repository/npm-public/
     npm config set cache ${HOME}/.npm/.cache/npm
-    npm config set disturl http://nexus3.local:28081/nexus/repository/npm-dist/
-    npm config set sass_binary_site http://nexus3.local:28081/nexus/repository/npm-sass/
+    npm config set disturl http://nexus3:28081/nexus/repository/npm-dist/
+    npm config set sass_binary_site http://nexus3:28081/nexus/repository/npm-sass/
 
 cat or edit '~/.npmrc':
 
@@ -116,11 +116,11 @@ cat or edit '~/.npmrc':
 
 Publish into registry
 
-    npm login --registry=http://nexus3.local:28081/nexus/repository/npm-hosted/
+    npm login --registry=http://nexus3:28081/nexus/repository/npm-hosted/
     npm --loglevel info install -g bower
-    npm publish --registry http://nexus3.local:28081/nexus/repository/npm-hosted/
-    or "publishConfig" : {"registry" : "http://nexus3.local:28081/nexus/repository/npm-hosted/"},
-    npm deprecate --registry http://nexus3.local:28081/nexus/repository/npm-hosted/ testproject1@0.0.1 "This package is deprecated"
+    npm publish --registry http://nexus3:28081/nexus/repository/npm-hosted/
+    or "publishConfig" : {"registry" : "http://nexus3:28081/nexus/repository/npm-hosted/"},
+    npm deprecate --registry http://nexus3:28081/nexus/repository/npm-hosted/ testproject1@0.0.1 "This package is deprecated"
 
 ## V. Use as bower registry:
 
@@ -130,8 +130,8 @@ projectRoot/.bowerrc
 
     {
     "registry" : {
-      "search" : [ "http://nexus3.local:28081/nexus/repository/bower-public" ],
-      "register" : "http://nexus3.local:28081/nexus/repository/bower-hosted"
+      "search" : [ "http://nexus3:28081/nexus/repository/bower-public" ],
+      "register" : "http://nexus3:28081/nexus/repository/bower-hosted"
     },
     "resolvers" : [ "bower-nexus3-resolver" ],
     "nexus" : {"username" : "deployment","password" : "deployment"}

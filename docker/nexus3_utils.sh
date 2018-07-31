@@ -6,7 +6,7 @@ nexus_address() {
     if [ ! -z "${NEXUS_ADDRESS}" ]; then
         echo "${NEXUS_ADDRESS}"
     else
-        if [ -z "${NEXUS3_HOSTNAME}" ]; then NEXUS3_HOSTNAME="nexus3.local"; fi
+        if [ -z "${NEXUS3_HOSTNAME}" ]; then NEXUS3_HOSTNAME="nexus3"; fi
         echo "${NEXUS3_HOSTNAME}:8081"
     fi
 }
