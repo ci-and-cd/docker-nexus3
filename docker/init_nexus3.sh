@@ -27,6 +27,9 @@ init_nexus() {
 
     local maven_group_members="maven-releases,maven-snapshots,maven-central"
 
+    nexus_maven2_hosted "maven-thirdparty"
+    maven_group_members="${maven_group_members},maven-thirdparty"
+
     # sonatype
     nexus_maven2_proxy "sonatype-releases" "RELEASE" "https://oss.sonatype.org/content/repositories/releases/"
     maven_group_members="${maven_group_members},sonatype-releases"

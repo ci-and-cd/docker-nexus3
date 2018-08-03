@@ -105,6 +105,46 @@ nexus_user() {
     "$(nexus_http_prefix)/extdirect" 2>/dev/null > /dev/null
 }
 
+# arguments: id
+# returns:
+nexus_maven2_hosted() {
+    curl -i -X POST \
+    -b /tmp/NEXUS_COOKIE \
+    -H 'Content-Type: application/json' \
+    -H 'Accept: */*' \
+    -H 'X-Nexus-UI: true' \
+    --data-binary "
+    {
+      \"action\":\"coreui_Repository\",
+      \"method\":\"create\",
+      \"data\":[
+        {
+          \"attributes\":{
+            \"maven\":{
+              \"versionPolicy\":\"MIXED\",
+              \"layoutPolicy\":\"STRICT\"
+            },
+            \"storage\":{
+              \"blobStoreName\":\"default\",
+              \"strictContentTypeValidation\":true,
+              \"writePolicy\":\"ALLOW\"
+            }
+          },
+          \"name\":\"${1}\",
+          \"format\":\"\",
+          \"type\":\"\",
+          \"url\":\"\",
+          \"online\":true,
+          \"recipe\":\"maven2-hosted\"
+        }
+      ],
+      \"type\":\"rpc\",
+      \"tid\":0
+    }
+    " \
+    "$(nexus_http_prefix)/extdirect" 2>/dev/null > /dev/null
+}
+
 # arguments: id, repoPolicy, remoteStorageUrl
 # returns:
 nexus_maven2_proxy() {
