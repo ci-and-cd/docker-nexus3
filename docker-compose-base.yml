@@ -6,9 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-      - build_fileserver=https://github.com
+      - IMAGE_ARG_FILESERVER=${IMAGE_ARG_FILESERVER}
     command: ["/opt/sonatype/start-nexus-repository-manager.sh"]
-    #- ./keystore.jks:/nexus-data/keystore.jks
     environment:
     - DOCKER_MIRROR_GCR=${DOCKER_MIRROR_GCR:-http://gcr.io.local:5000}
     # http://nexus3:28081

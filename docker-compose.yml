@@ -28,6 +28,7 @@ services:
     #- "${NEXUS3_DOCKER_PROXY_HUB_PORT:-5003}/tcp"
     volumes:
     - data:/nexus-data
+    #- data/keystore.jks:/nexus-data/keystore.jks
 
 networks:
   local-network:
