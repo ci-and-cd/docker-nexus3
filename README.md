@@ -164,6 +164,31 @@ see: https://github.com/sonatype/docker-nexus3/blob/master/Dockerfile
 see: http://www.sonatype.org/nexus/2015/09/22/docker-and-nexus-3-ready-set-action/
 see: http://codeheaven.io/using-nexus-3-as-your-repository-part-3-docker-images/
 
+## Fix database
+
+```bash
+
+see: https://stackoverflow.com/questions/42951710/orientdb-corruption-state-in-nexus-repository-version-3-2-0-01
+
+/opt/jdk1.8.0_181/bin/java -jar /opt/sonatype/nexus/lib/support/nexus-orient-console.jar
+CONNECT PLOCAL:/nexus-data/db/component admin admin
+
+REBUILD INDEX *
+export database component-export
+drop database
+#create database /nexus-data/db/component
+CREATE DATABASE PLOCAL:/nexus-data/db/component
+import database component-export.json.gz
+
+REBUILD INDEX *
+REPAIR DATABASE --fix-graph
+REPAIR DATABASE --fix-links
+REPAIR DATABASE --fix-ridbags
+REPAIR DATABASE --fix-bonsai
+DISCONNECT
+
+```
+
 ## TODO
 
 Use the official REST API to interact with nexus3
