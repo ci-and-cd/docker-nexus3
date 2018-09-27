@@ -173,14 +173,14 @@ nexus_maven2_proxy() {
             },
             \"httpclient\": {
               \"blocked\": false,
-              \"autoBlock\": true
+              \"autoBlock\": false
             },
             \"storage\": {
               \"blobStoreName\": \"default\",
               \"strictContentTypeValidation\": true
             },
             \"negativeCache\": {
-              \"enabled\": true,
+              \"enabled\": false,
               \"timeToLive\": ${timeToLive}
             }
           },
@@ -263,7 +263,7 @@ nexus_raw_proxy() {
             },
             \"httpclient\": {
               \"blocked\": false,
-              \"autoBlock\": true,
+              \"autoBlock\": false,
               \"connection\": {
                 \"useTrustStore\": false
               }
@@ -412,7 +412,7 @@ nexus_docker_proxy() {
             \"dockerProxy\":{${index},\"useTrustStoreForIndexAccess\": false},
             \"httpclient\": {
               \"blocked\": false,
-              \"autoBlock\": true,
+              \"autoBlock\": false,
               \"connection\": {
                 \"useTrustStore\": false
               }
@@ -705,7 +705,7 @@ nexus_bower_proxy() {
             },
             \"httpclient\": {
               \"blocked\": false,
-              \"autoBlock\": true
+              \"autoBlock\": false
             },
             \"storage\": {
               \"blobStoreName\": \"default\",

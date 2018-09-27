@@ -14,10 +14,10 @@ init_nexus() {
         fi
     fi
 
-    # 默认用户名/密码 admin/admin123
+    # default username/password admin/admin123
     nexus_login "admin" "admin123"
 
-    # 设置deployment账户密码
+    # setup account deployment's password
     # see: http://stackoverflow.com/questions/40966763/how-do-i-create-a-user-with-the-a-role-with-the-minimal-set-of-privileges-deploy
     # see: https://books.sonatype.com/nexus-book/reference3/security.html#privileges
     if [ -z "${NEXUS3_DEPLOYMENT_PASSWORD}" ]; then
@@ -36,8 +36,22 @@ init_nexus() {
     nexus_maven2_proxy "sonatype-snapshots" "SNAPSHOT" "https://oss.sonatype.org/content/repositories/snapshots/"
     maven_group_members="${maven_group_members},sonatype-snapshots"
 
-    # TODO nexus_maven2_hosted "maven-thirdparty" "SNAPSHOT"
-    # TODO maven_group_members="${maven_group_members},maven-thirdparty"
+    # proxy private nexus
+    # nexus2 /nexus/content/groups/public/
+    if [[ "${INFRASTRUCTURE_INTERNAL_NEXUS2}" == http* ]]; then
+        nexus_maven2_proxy "private-nexus2.snapshot" "SNAPSHOT" "${INFRASTRUCTURE_INTERNAL_NEXUS2}/nexus/content/groups/public/"
+        maven_group_members="${maven_group_members},private-nexus2.snapshot"
+        nexus_maven2_proxy "private-nexus2.release" "RELEASE" "${INFRASTRUCTURE_INTERNAL_NEXUS2}/nexus/content/groups/public/"
+        maven_group_members="${maven_group_members},private-nexus2.release"
+    fi
+    # nexus3 /nexus/repository/maven-public/
+    if [[ "${INFRASTRUCTURE_INTERNAL_NEXUS3}" == http* ]]; then
+        nexus_maven2_proxy "private-nexus3.snapshot" "SNAPSHOT" "${INFRASTRUCTURE_INTERNAL_NEXUS3}/nexus/repository/maven-public/"
+        maven_group_members="${maven_group_members},private-nexus3.snapshot"
+        nexus_maven2_proxy "private-nexus3.release" "RELEASE" "${INFRASTRUCTURE_INTERNAL_NEXUS3}/nexus/repository/maven-public/"
+        maven_group_members="${maven_group_members},private-nexus3.release"
+    fi
+
     # https://github.com/spring-projects/spring-framework/wiki/Spring-repository-FAQ
     nexus_maven2_proxy "spring-libs-release" "RELEASE" "http://repo.spring.io/libs-release"
     nexus_maven2_proxy "spring-libs-milestone" "RELEASE" "http://repo.spring.io/libs-milestone"
@@ -53,22 +67,6 @@ init_nexus() {
     maven_group_members="${maven_group_members},spring-libs-release-local,spring-libs-milestone-local,spring-libs-snapshot-local"
     nexus_maven2_proxy "groovy-bintray" "RELEASE" "https://dl.bintray.com/groovy/maven"
     maven_group_members="${maven_group_members},groovy-bintray"
-
-    # proxy private nexus
-    # nexus2 /nexus/content/groups/public/
-    if [[ "${INFRASTRUCTURE_INTERNAL_NEXUS2}" == http* ]]; then
-        nexus_maven2_proxy "internal-nexus2.snapshot" "SNAPSHOT" "${INFRASTRUCTURE_INTERNAL_NEXUS2}/nexus/content/groups/public/"
-        maven_group_members="${maven_group_members},internal-nexus2.snapshot"
-        nexus_maven2_proxy "internal-nexus2.release" "RELEASE" "${INFRASTRUCTURE_INTERNAL_NEXUS2}/nexus/content/groups/public/"
-        maven_group_members="${maven_group_members},internal-nexus2.release"
-    fi
-    # nexus3 /nexus/repository/maven-public/
-    if [[ "${INFRASTRUCTURE_INTERNAL_NEXUS3}" == http* ]]; then
-        nexus_maven2_proxy "internal-nexus3.snapshot" "SNAPSHOT" "${INFRASTRUCTURE_INTERNAL_NEXUS3}/nexus/repository/maven-public/"
-        maven_group_members="${maven_group_members},internal-nexus3.snapshot"
-        nexus_maven2_proxy "internal-nexus3.release" "RELEASE" "${INFRASTRUCTURE_INTERNAL_NEXUS3}/nexus/repository/maven-public/"
-        maven_group_members="${maven_group_members},internal-nexus3.release"
-    fi
 
     # http://conjars.org
     nexus_maven2_proxy "conjars.org" "RELEASE" "http://conjars.org/repo/"

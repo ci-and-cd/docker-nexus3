@@ -11,7 +11,7 @@ Do not use NFS on nexus3.
 
 Environment variables
 
-  Local nexus3 can set up a company's internal nexus2 or nexus3 as upstream
+  Local nexus3 can set up a company's private nexus2 or nexus3 as upstream
 
     export INFRASTRUCTURE_INTERNAL_NEXUS2=<http://nexus2:28081>
   or
