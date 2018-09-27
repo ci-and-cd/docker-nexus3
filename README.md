@@ -79,8 +79,14 @@ keytool -keystore keystore -alias jetty -genkeypair -keyalg RSA \
 keytool -keystore keystore -alias jetty -genkey -keyalg RSA -sigalg SHA256withRSA -ext 'SAN=dns:jetty.eclipse.org,dns:*.jetty.org'
 ```
 
+## III. Use as a file server
 
-## III. Use as Docker registry and mirror
+Upload file
+```bash
+curl --user "${username}:${passwrod}" -T localfile.tar.gz http://fileserver.infra.top/anypath/file.tar.gz
+```
+
+## IV. Use as Docker registry and mirror
 
 Issue: Must login (even read only access) before use.
 see: [add anonymous read access support for docker repositories](https://issues.sonatype.org/browse/NEXUS-10813)
@@ -103,7 +109,7 @@ Login
     curl http://nexus3:5001/v2/_catalog
     curl http://nexus3:5001/v2/google_containers/kube-dnsmasq-amd64/tags/list
 
-## IV. Use as npm registry:
+## V. Use as npm registry:
 
     npm config set registry http://nexus3:28081/nexus/repository/npm-public/
     npm config set cache ${HOME}/.npm/.cache/npm
@@ -122,7 +128,7 @@ Publish into registry
     or "publishConfig" : {"registry" : "http://nexus3:28081/nexus/repository/npm-hosted/"},
     npm deprecate --registry http://nexus3:28081/nexus/repository/npm-hosted/ testproject1@0.0.1 "This package is deprecated"
 
-## V. Use as bower registry:
+## VI. Use as bower registry:
 
     npm install -g bower && npm install -g bower-nexus3-resolver
 
@@ -145,7 +151,7 @@ projectRoot/package.json
     bower register example-package git://gitserver/project.git
     bower install example-package
 
-## VI. LDAP
+## VII. LDAP
 
 1. Make sure DNS is ok, LDAP server is accessible from nexus3.
 
@@ -157,7 +163,7 @@ projectRoot/package.json
 
 ![](src/site/markdown/images/nexus3-02.png)
 
-## VII. References
+## VIII. References
 
 see: https://github.com/clearent/nexus
 see: https://github.com/sonatype/docker-nexus3/blob/master/Dockerfile
