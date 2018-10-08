@@ -15,7 +15,7 @@ services:
     networks:
       local-network:
         ipv4_address: 172.16.238.31
-        ipv6_address: 2001:3984:3989::31
+        #ipv6_address: 2001:3984:3989::31
     ports:
     - "${NEXUS3_PORT:-28081}:${NEXUS3_PORT:-28081}"
     # registry: docker-hosted@5000, expose through a https nginx-proxy instance
@@ -39,7 +39,7 @@ networks:
       driver: default
       config:
       - subnet: 172.16.238.0/24
-      - subnet: 2001:3984:3989::/64
+      #- subnet: 2001:3984:3989::/64
 
 volumes:
   data:
