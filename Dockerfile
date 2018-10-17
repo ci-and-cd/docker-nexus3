@@ -21,8 +21,8 @@ RUN set -ex \
   && chgrp nexus /opt/sonatype/nexus
 
 
-COPY --chown=root:root   --from=sonatype/nexus3:3.13.0 /opt/ opt/
-COPY --chown=nexus:nexus --from=sonatype/nexus3:3.13.0 /nexus-data /nexus-data
+COPY --chown=root:root   --from=sonatype/nexus3:3.14.0 /opt/ opt/
+COPY --chown=nexus:nexus --from=sonatype/nexus3:3.14.0 /nexus-data /nexus-data
 COPY --chown=root:root   --from=cirepo/waitforit:2.2.0-archive /data/root /
 COPY --chown=root:root   docker /
 
@@ -32,6 +32,9 @@ RUN set -ex \
   && yum -y install epel-release \
   && yum -y install socat \
   && yum -y install aria2 httpie \
+  && yum -y install sudo \
+  && echo "nexus ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/nexus \
+  && chmod 0440 /etc/sudoers.d/nexus \
   && yum -y clean all \
   && cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 

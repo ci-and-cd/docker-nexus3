@@ -108,6 +108,7 @@ Login
     docker pull nexus3:5001/google_containers/kube-dnsmasq-amd64:1.4
     curl http://nexus3:5001/v2/_catalog
     curl http://nexus3:5001/v2/google_containers/kube-dnsmasq-amd64/tags/list
+    curl http://nexus3:5001/v2/library/alpine/manifests/3.8
 
 ## V. Use as npm registry:
 
