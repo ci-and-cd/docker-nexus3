@@ -21,4 +21,12 @@ services:
     - NEXUS3_HOSTNAME=${CONTAINER_HOST_NAME:-nexus3}
     - NEXUS3_PORT=${NEXUS3_PORT:-28081}
     image: ${IMAGE_PREFIX:-cirepo/}nexus3:${IMAGE_TAG:-3.14.0}
+    labels:
+      deploy.config.commit: ${LABEL_DEPLOY_CONFIG_COMMIT:-unknown}
+      deploy.config.name: ${LABEL_DEPLOY_CONFIG_NAME:-unknown}
+      deploy.config.ref: ${LABEL_DEPLOY_CONFIG_REF:-unknown}
+      deploy.util.commit: ${LABEL_DEPLOY_UTIL_COMMIT:-unknown}
+      deploy.util.ref: ${LABEL_DEPLOY_UTIL_REF:-unknown}
+      instance.name.short: ${LABEL_INSTANCE_NAME_SHORT:-standalone.nexus3}
+      instance.name: ${LABEL_INSTANCE_NAME:-127.0.0.1/nexus3/standalone}
     restart: always
