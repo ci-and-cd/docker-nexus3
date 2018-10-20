@@ -152,6 +152,18 @@ projectRoot/package.json
     bower register example-package git://gitserver/project.git
     bower install example-package
 
+## VII. Use as pypi repository
+
+~/.pip/pip.conf
+```text
+[global]
+index = https://username:password@nexus3:28081/nexus/repository/pypi-all/pypi
+index-url = https://username:password@nexus3:28081/nexus/repository/pypi-all/simple
+#format=columns
+trusted-host = nexus3
+timeout = 120
+```
+
 ## VII. LDAP
 
 1. Make sure DNS is ok, LDAP server is accessible from nexus3.
