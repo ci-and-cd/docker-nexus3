@@ -5,17 +5,25 @@ services:
     extends:
       file: docker-compose-base.yml
       service: base-nexus3
-    container_name: ${CONTAINER_HOST_NAME:-nexus3}
+    container_name: ${CONTAINER_HOST_NAME:-standalone.nexus3}
     environment:
     - NEXUS3_DOCKER_HOSTED_PORT=${NEXUS3_DOCKER_HOSTED_PORT:-5000}
     - NEXUS3_DOCKER_PUBLIC_PORT=${NEXUS3_DOCKER_PUBLIC_PORT:-5001}
     #- NEXUS3_DOCKER_PROXY_163_PORT=${NEXUS3_DOCKER_PROXY_163_PORT:-5002}
     #- NEXUS3_DOCKER_PROXY_HUB_PORT=${NEXUS3_DOCKER_PROXY_HUB_PORT:-5003}
-    hostname: ${CONTAINER_HOST_NAME:-nexus3}
+    hostname: ${CONTAINER_HOST_NAME:-standalone.nexus3}
+    labels:
+      deploy.config.commit: ${LABEL_DEPLOY_CONFIG_COMMIT:-unknown}
+      deploy.config.name: ${LABEL_DEPLOY_CONFIG_NAME:-unknown}
+      deploy.config.ref: ${LABEL_DEPLOY_CONFIG_REF:-unknown}
+      deploy.util.commit: ${LABEL_DEPLOY_UTIL_COMMIT:-unknown}
+      deploy.util.ref: ${LABEL_DEPLOY_UTIL_REF:-unknown}
+      instance.name.short: ${LABEL_INSTANCE_NAME_SHORT:-standalone.nexus3}
+      instance.name: ${LABEL_INSTANCE_NAME:-127.0.0.1/nexus3/standalone}
     networks:
       local-network:
-        ipv4_address: 172.16.238.31
-        #ipv6_address: 2001:3984:3989::31
+        ipv4_address: ${IPV4_ADDRESS:-172.16.238.31}
+        #ipv6_address: ${IPV6_ADDRESS:-2001:3984:3989::31}
     ports:
     - "${NEXUS3_PORT:-28081}:${NEXUS3_PORT:-28081}"
     # registry: docker-hosted@5000, expose through a https nginx-proxy instance
