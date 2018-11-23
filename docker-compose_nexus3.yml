@@ -36,6 +36,8 @@ services:
     #- "${NEXUS3_DOCKER_PROXY_HUB_PORT:-5003}/tcp"
     volumes:
     - data:/nexus-data
+    - ${NEXUS_HOST_FILE1:-data/opt/.gitignore}:${NEXUS_CONTAINER_FILE1:-/tmp/file1}
+    - ${NEXUS_HOST_FILE2:-data/opt/.gitignore}:${NEXUS_CONTAINER_FILE2:-/tmp/file2}
 
 networks:
   local-network:
