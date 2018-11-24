@@ -8,7 +8,7 @@ init_nexus() {
         waitforit -address=tcp://$(nexus_address) -timeout=180
         local nexus_running="$?"
         echo "nexus_running: ${nexus_running}"
-        if [ ${nexus_running} -gt 0 ]; then
+        if [[ ${nexus_running} -gt 0 ]]; then
             echo "nexus is not running"
             exit 1
         fi
@@ -20,7 +20,7 @@ init_nexus() {
     # setup account deployment's password
     # see: http://stackoverflow.com/questions/40966763/how-do-i-create-a-user-with-the-a-role-with-the-minimal-set-of-privileges-deploy
     # see: https://books.sonatype.com/nexus-book/reference3/security.html#privileges
-    if [ -z "${NEXUS3_DEPLOYMENT_PASSWORD}" ]; then
+    if [[ -z "${NEXUS3_DEPLOYMENT_PASSWORD}" ]]; then
         NEXUS3_DEPLOYMENT_PASSWORD="deployment"
     fi
     nexus_user "deployment" "${NEXUS3_DEPLOYMENT_PASSWORD}"
@@ -113,17 +113,21 @@ init_nexus() {
     nexus_raw_hosted "files"
 
     # see: https://books.sonatype.com/nexus-book/3.0/reference/docker.html
-    if [ -z "${NEXUS3_DOCKER_HOSTED_PORT}" ]; then NEXUS3_DOCKER_HOSTED_PORT="5000"; fi
-    if [ -z "${NEXUS3_DOCKER_PUBLIC_PORT}" ]; then NEXUS3_DOCKER_PUBLIC_PORT="5001"; fi
-    if [ -z "${NEXUS3_DOCKER_PROXY_163_PORT}" ]; then NEXUS3_DOCKER_PROXY_163_PORT="5002"; fi
-    if [ -z "${NEXUS3_DOCKER_PROXY_HUB_PORT}" ]; then NEXUS3_DOCKER_PROXY_HUB_PORT="5003"; fi
+    if [[ -z "${NEXUS3_DOCKER_HOSTED_PORT}" ]]; then NEXUS3_DOCKER_HOSTED_PORT="5010"; fi
+    if [[ -z "${NEXUS3_DOCKER_INCOMING_PORT}" ]]; then NEXUS3_DOCKER_INCOMING_PORT="$(( ${NEXUS3_DOCKER_HOSTED_PORT} + 2 ))"; fi
+    if [[ -z "${NEXUS3_DOCKER_UAT_PORT}" ]]; then NEXUS3_DOCKER_UAT_PORT="$(( ${NEXUS3_DOCKER_HOSTED_PORT} + 1 ))"; fi
+    if [[ -z "${NEXUS3_DOCKER_PUBLIC_PORT}" ]]; then NEXUS3_DOCKER_PUBLIC_PORT="5000"; fi
+    if [[ -z "${NEXUS3_DOCKER_PROXY_163_PORT}" ]]; then NEXUS3_DOCKER_PROXY_163_PORT="5022"; fi
+    if [[ -z "${NEXUS3_DOCKER_PROXY_HUB_PORT}" ]]; then NEXUS3_DOCKER_PROXY_HUB_PORT="5023"; fi
     nexus_docker_hosted "docker-hosted" "http" "${NEXUS3_DOCKER_HOSTED_PORT}"
+    nexus_docker_hosted "docker-incoming" "http" "${NEXUS3_DOCKER_INCOMING_PORT}"
+    nexus_docker_hosted "docker-uat" "http" "${NEXUS3_DOCKER_UAT_PORT}"
     local docker_registries=""
-    #docker_registries="${docker_registries},docker-hosted"
+    docker_registries="${docker_registries},docker-hosted"
     nexus_docker_proxy "docker-central-hub" "http" "${NEXUS3_DOCKER_PROXY_HUB_PORT}" "https://registry-1.docker.io" "HUB"
     docker_registries="${docker_registries},docker-central-hub"
-    if [ ! -z "${DOCKER_MIRROR_GCR}" ]; then
-        nexus_docker_proxy "docker-mirror-gcr" "http" "5004" "${DOCKER_MIRROR_GCR}" "REGISTRY"
+    if [[ ! -z "${DOCKER_MIRROR_GCR}" ]]; then
+        nexus_docker_proxy "docker-mirror-gcr" "http" "5024" "${DOCKER_MIRROR_GCR}" "REGISTRY"
         docker_registries="${docker_registries},docker-mirror-gcr"
     fi
     nexus_docker_proxy "docker-central-163" "http" "${NEXUS3_DOCKER_PROXY_163_PORT}" "http://hub-mirror.c.163.com" "HUB"
@@ -150,6 +154,6 @@ init_nexus() {
 echo "init_nexus3.sh pwd: $(pwd)"
 init_nexus
 
-if [ ! -z "${NEXUS3_PORT}" ] && [ "${NEXUS3_PORT}" != "8081" ]; then
+if [[ ! -z "${NEXUS3_PORT}" ]] && [[ "${NEXUS3_PORT}" != "8081" ]]; then
     socat TCP-LISTEN:${NEXUS3_PORT},fork TCP:127.0.0.1:8081 &
 fi

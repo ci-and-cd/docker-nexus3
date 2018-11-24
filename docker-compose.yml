@@ -7,10 +7,10 @@ services:
       service: base-nexus3
     container_name: ${CONTAINER_HOST_NAME:-standalone.nexus3}
     environment:
-    - NEXUS3_DOCKER_HOSTED_PORT=${NEXUS3_DOCKER_HOSTED_PORT:-5000}
-    - NEXUS3_DOCKER_PUBLIC_PORT=${NEXUS3_DOCKER_PUBLIC_PORT:-5001}
-    #- NEXUS3_DOCKER_PROXY_163_PORT=${NEXUS3_DOCKER_PROXY_163_PORT:-5002}
-    #- NEXUS3_DOCKER_PROXY_HUB_PORT=${NEXUS3_DOCKER_PROXY_HUB_PORT:-5003}
+    - NEXUS3_DOCKER_HOSTED_PORT=${NEXUS3_DOCKER_HOSTED_PORT:-5010}
+    - NEXUS3_DOCKER_PUBLIC_PORT=${NEXUS3_DOCKER_PUBLIC_PORT:-5000}
+    #- NEXUS3_DOCKER_PROXY_163_PORT=${NEXUS3_DOCKER_PROXY_163_PORT:-5022}
+    #- NEXUS3_DOCKER_PROXY_HUB_PORT=${NEXUS3_DOCKER_PROXY_HUB_PORT:-5023}
     hostname: ${CONTAINER_HOST_NAME:-standalone.nexus3}
     labels:
       deploy.config.commit: ${LABEL_DEPLOY_CONFIG_COMMIT:-unknown}
@@ -26,14 +26,16 @@ services:
         #ipv6_address: ${IPV6_ADDRESS:-2001:3984:3989::31}
     ports:
     - "${NEXUS3_PORT:-28081}:${NEXUS3_PORT:-28081}"
-    # registry: docker-hosted@5000, expose through a https nginx-proxy instance
-    - "${NEXUS3_DOCKER_HOSTED_PORT:-5000}/tcp"
-    # mirror: docker-public@5001, expose through a https nginx-proxy instance
-    - "${NEXUS3_DOCKER_PUBLIC_PORT:-5001}/tcp"
-    # proxy: docker-central-163@5002, expose through a https nginx-proxy instance
-    #- "${NEXUS3_DOCKER_PROXY_163_PORT:-5002}/tcp"
-    # proxy: docker-central-hub@5003, expose through a https nginx-proxy instance
-    #- "${NEXUS3_DOCKER_PROXY_HUB_PORT:-5003}/tcp"
+    # registry: docker-hosted@5010, expose through a https nginx-proxy instance
+    - "${NEXUS3_DOCKER_HOSTED_PORT:-5010}/tcp"
+    - "${NEXUS3_DOCKER_UAT_PORT:-5011}/tcp"
+    - "${NEXUS3_DOCKER_INCOMING_PORT:-5012}/tcp"
+    # mirror: docker-public@5000, expose through a https nginx-proxy instance
+    - "${NEXUS3_DOCKER_PUBLIC_PORT:-5000}/tcp"
+    # proxy: docker-central-163@5022, expose through a https nginx-proxy instance
+    #- "${NEXUS3_DOCKER_PROXY_163_PORT:-5022}/tcp"
+    # proxy: docker-central-hub@5023, expose through a https nginx-proxy instance
+    #- "${NEXUS3_DOCKER_PROXY_HUB_PORT:-5023}/tcp"
     volumes:
     - data:/nexus-data
     - ${NEXUS_HOST_FILE1:-./data/opt/.gitignore}:${NEXUS_CONTAINER_FILE1:-/tmp/file1}

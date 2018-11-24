@@ -382,7 +382,7 @@ nexus_docker_proxy() {
     elif [ "https" == ${2} ]; then
         port="\"httpsPort\": ${3}"
     else
-        port="\"httpPort\": 5000"
+        port="\"httpPort\": 5010"
     fi
 
     # HUB,CUSTOM(${5}),REGISTRY
@@ -454,7 +454,7 @@ nexus_docker_hosted() {
     elif [ "https" == ${2} ]; then
         port="\"httpsPort\": ${3}"
     else
-        port="\"httpPort\": 5000"
+        port="\"httpPort\": 5010"
     fi
 
     curl -i -X POST \
@@ -502,7 +502,7 @@ nexus_docker_group() {
     elif [ "https" == ${2} ]; then
         port="\"httpsPort\": ${3}"
     else
-        port="\"httpPort\": 5000"
+        port="\"httpPort\": 5010"
     fi
 
     local members=$(build_list "${4}")

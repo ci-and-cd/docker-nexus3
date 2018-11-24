@@ -94,21 +94,21 @@ see: [add anonymous read access support for docker repositories](https://issues.
 Login
 
     #docker login -u deployment -p deployment nexus3
-    docker login -u deployment -p deployment nexus3:5000
-    docker login -u deployment -p deployment nexus3:5002
-    docker login -u deployment -p deployment nexus3:5003
+    docker login -u deployment -p deployment nexus3:5010
+    docker login -u deployment -p deployment nexus3:5022
+    docker login -u deployment -p deployment nexus3:5023
     cat ~/.docker/config.json
 
-    docker search nexus3:5000/alpine
-    docker pull nexus3:5000/alpine
-    docker tag nginx:1.11.5-alpine nexus3:5000/nginx:1.11.5-alpine
-    docker push nexus3:5000/nginx:1.11.5-alpine
+    docker search nexus3:5010/alpine
+    docker pull nexus3:5010/alpine
+    docker tag nginx:1.11.5-alpine nexus3:5010/nginx:1.11.5-alpine
+    docker push nexus3:5010/nginx:1.11.5-alpine
     
     # Test docker mirror of gcr.io
-    docker pull nexus3:5001/google_containers/kube-dnsmasq-amd64:1.4
-    curl http://nexus3:5001/v2/_catalog
-    curl http://nexus3:5001/v2/google_containers/kube-dnsmasq-amd64/tags/list
-    curl http://nexus3:5001/v2/library/alpine/manifests/3.8
+    docker pull nexus3:5000/google_containers/kube-dnsmasq-amd64:1.4
+    curl http://nexus3:5000/v2/_catalog
+    curl http://nexus3:5000/v2/google_containers/kube-dnsmasq-amd64/tags/list
+    curl http://nexus3:5000/v2/library/alpine/manifests/3.8
 
 ## V. Use as npm registry:
 

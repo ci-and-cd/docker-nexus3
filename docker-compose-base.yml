@@ -9,7 +9,7 @@ services:
       - IMAGE_ARG_FILESERVER=${IMAGE_ARG_FILESERVER}
     command: ["/opt/sonatype/start-nexus-repository-manager.sh"]
     environment:
-    - DOCKER_MIRROR_GCR=${DOCKER_MIRROR_GCR:-http://gcr.io.local:5000}
+    - DOCKER_MIRROR_GCR=${DOCKER_MIRROR_GCR:-http://gcr.io.local:5010}
     # http://nexus3:28081
     - INFRASTRUCTURE_INTERNAL_NEXUS3=${INFRASTRUCTURE_INTERNAL_NEXUS3:-}
     # http://nexus2
