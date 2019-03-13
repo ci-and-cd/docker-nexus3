@@ -36,7 +36,7 @@ see: http://www.eclipse.org/jetty/documentation/current/configuring-ssl.html
 git clone https://github.com/certbot/certbot
 cd certbot
 ./certbot-auto --help
-./certbot-auto certonly -a standalone \
+./certbot-auto certonly --register-unsafely-without-email -a standalone \
     -d ${NEXUS3_DOMAIN} \
     -d docker-mirror.${NEXUS3_DOMAIN} \
     -d docker-registry.${NEXUS3_DOMAIN} \
