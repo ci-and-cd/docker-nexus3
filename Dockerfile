@@ -21,8 +21,8 @@ RUN set -ex \
   && chgrp nexus /opt/sonatype/nexus
 
 
-COPY --chown=root:root   --from=sonatype/nexus3:3.14.0 /opt/ opt/
-COPY --chown=nexus:nexus --from=sonatype/nexus3:3.14.0 /nexus-data /nexus-data
+COPY --chown=root:root   --from=sonatype/nexus3:3.16.2 /opt/ opt/
+COPY --chown=nexus:nexus --from=sonatype/nexus3:3.16.2 /nexus-data /nexus-data
 COPY --chown=root:root   --from=cirepo/waitforit:2.2.0-archive /data/root /
 COPY --chown=root:root   docker /
 

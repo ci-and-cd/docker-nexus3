@@ -20,7 +20,7 @@ services:
     - NEXUS3_DEPLOYMENT_PASSWORD=${NEXUS3_DEPLOYMENT_PASSWORD:-deployment}
     - NEXUS3_HOSTNAME=${CONTAINER_HOST_NAME:-nexus3}
     - NEXUS3_PORT=${NEXUS3_PORT:-28081}
-    image: ${IMAGE_PREFIX:-cirepo/}nexus3:${IMAGE_TAG:-3.14.0}
+    image: ${IMAGE_PREFIX:-cirepo/}nexus3:${IMAGE_TAG:-3.16.2}
     labels:
       deploy.config.commit: ${LABEL_DEPLOY_CONFIG_COMMIT:-unknown}
       deploy.config.name: ${LABEL_DEPLOY_CONFIG_NAME:-unknown}
