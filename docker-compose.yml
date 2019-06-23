@@ -11,6 +11,8 @@ services:
     - NEXUS3_DOCKER_PUBLIC_PORT=${NEXUS3_DOCKER_PUBLIC_PORT:-5000}
     #- NEXUS3_DOCKER_PROXY_163_PORT=${NEXUS3_DOCKER_PROXY_163_PORT:-5022}
     #- NEXUS3_DOCKER_PROXY_HUB_PORT=${NEXUS3_DOCKER_PROXY_HUB_PORT:-5023}
+    extra_hosts:
+    - "${CONTAINER_HOST_NAME:-standalone.nexus3}:${IPV4_ADDRESS:-172.16.238.31}"
     hostname: ${CONTAINER_HOST_NAME:-standalone.nexus3}
     labels:
       deploy.config.commit: ${LABEL_DEPLOY_CONFIG_COMMIT:-unknown}

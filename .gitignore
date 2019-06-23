@@ -6,4 +6,5 @@
 *.bak
 *.jks
 
+/nexus-*
 /docker/nexus-*
