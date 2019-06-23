@@ -34,7 +34,15 @@ RUN curl -L https://www.getchef.com/chef/install.sh | bash -s -- -v 14.12.9 \
     && rm -rf /etc/chef \
     && rm -rf /opt/chefdk \
     && rm -rf /var/cache/yum \
-    && rm -rf /var/chef
+    && rm -rf /var/chef \
+    && set -ex \
+    && OLD_UID=$(id -u nexus) \
+    && OLD_GID=$(id -u nexus) \
+    && usermod -u 1000  nexus \
+    && groupmod -g 1000 nexus \
+    && chown -hR nexus:nexus ${NEXUS_HOME} ${NEXUS_DATA} ${SONATYPE_WORK} \
+    && find -user ${OLD_UID} -path "/" -prune -exec chown nexus:nexus {} ";"
+
 
 
 #RUN set -ex \
