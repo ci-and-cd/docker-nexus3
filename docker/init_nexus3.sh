@@ -30,6 +30,9 @@ init_nexus() {
     nexus_maven2_hosted "maven-thirdparty"
     maven_group_members="${maven_group_members},maven-thirdparty"
 
+    # set negativeCache false for maven-central
+    nexus_maven2_proxy "maven-central" "RELEASE" "https://repo1.maven.org/maven2/" "update"
+
     # sonatype
     nexus_maven2_proxy "sonatype-releases" "RELEASE" "https://oss.sonatype.org/content/repositories/releases/"
     maven_group_members="${maven_group_members},sonatype-releases"

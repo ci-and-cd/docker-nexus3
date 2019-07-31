@@ -149,6 +149,7 @@ nexus_maven2_hosted() {
 # returns:
 nexus_maven2_proxy() {
     local timeToLive="1440"
+    local action="${4:-create}"
 
     curl -i -X POST \
     -b /tmp/NEXUS_COOKIE \
@@ -158,13 +159,13 @@ nexus_maven2_proxy() {
     --data-binary "
     {
       \"action\": \"coreui_Repository\",
-      \"method\": \"create\",
+      \"method\": \"${action}\",
       \"data\": [
         {
           \"attributes\": {
             \"maven\": {
               \"versionPolicy\": \"${2}\",
-              \"layoutPolicy\": \"STRICT\"
+              \"layoutPolicy\": \"PERMISSIVE\"
             },
             \"proxy\": {
               \"remoteUrl\": \"${3}\",
@@ -173,20 +174,29 @@ nexus_maven2_proxy() {
             },
             \"httpclient\": {
               \"blocked\": false,
-              \"autoBlock\": false
+              \"autoBlock\": false,
+              \"connection\": {
+                \"useTrustStore\": false
+              }
             },
             \"storage\": {
               \"blobStoreName\": \"default\",
-              \"strictContentTypeValidation\": true
+              \"strictContentTypeValidation\": false
+            },
+            \"routingRules\": {
+              \"routingRuleId\": null
             },
             \"negativeCache\": {
               \"enabled\": false,
               \"timeToLive\": ${timeToLive}
+            },
+            \"cleanup\": {
+              \"policyName\": null
             }
           },
           \"name\": \"${1}\",
-          \"format\": \"\",
-          \"type\": \"\",
+          \"format\": \"maven2\",
+          \"type\": \"proxy\",
           \"url\": \"\",
           \"online\": true,
           \"authEnabled\": false,
